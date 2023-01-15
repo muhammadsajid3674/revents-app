@@ -13,19 +13,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Container, createTheme, Stack, ThemeProvider } from '@mui/material';
+import { Container, createTheme, Menu, MenuItem, Stack, ThemeProvider } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const drawerWidth = 240;
 const navItems = ['Events', 'People'];
+const pages = ['Login', 'Signup'];
 
 const lightTheme = createTheme({
     palette: {
-      light: {
-        main: '#fff',
-        // contrastText: '#000',
-      },
+        light: {
+            main: '#fff',
+            // contrastText: '#000',
+        },
     },
-  });
+});
 
 export default function Navbar(props) {
     const { window } = props;
@@ -37,8 +39,15 @@ export default function Navbar(props) {
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" sx={{ my: 2 }}>
-                MUI
+            <Typography variant="h6" sx={{ 
+                my: 2,
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+                 }}>
+                REVENTS
             </Typography>
             <Divider />
             <List>
@@ -54,6 +63,16 @@ export default function Navbar(props) {
     );
 
     const container = window !== undefined ? () => window().document.body : undefined;
+
+    const [auth, setAuth] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <React.Fragment>
@@ -73,9 +92,17 @@ export default function Navbar(props) {
                         <Typography
                             variant="h6"
                             component="div"
-                            sx={{ display: 'block' }}
+                            sx={{
+                                mr: 2,
+                                display: { xs: 'none', sm: 'block' },
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }}
                         >
-                            MUI
+                            REVENTS
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             {navItems.map((item) => (
@@ -84,12 +111,45 @@ export default function Navbar(props) {
                                 </Button>
                             ))}
                         </Box>
-                        <Stack spacing={1} direction="row">
-                            <ThemeProvider theme={lightTheme}>
-                            <Button variant="outlined" color='light'>Log in</Button>
-                            <Button variant="outlined" color='light'>Sign up</Button>
-                            </ThemeProvider>
-                        </Stack>
+                        {auth ? (
+                            <div>
+                                <IconButton
+                                    size="large"
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleMenu}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                                </Menu>
+                            </div>
+                        ) : (
+                            <Stack direction="row">
+                                <ThemeProvider theme={lightTheme}>
+                                    <Button variant="standard" color='light'>Log in</Button>
+                                    <Button variant="standard" color='light'>Sign up</Button>
+                                </ThemeProvider>
+                            </Stack>
+                        )}
                     </Toolbar>
                 </Container>
             </AppBar>
