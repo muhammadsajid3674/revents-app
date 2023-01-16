@@ -19,12 +19,13 @@ export default function MuiDatePicker(props) {
             <TextField
                 variant={variant ?? 'standard'}
                 fullWidth
+                value={value}
                 name={name}
                 id={id}
                 label={label}
                 error={error}
                 type={type}
-                defaultValue="YY-MM-DD"
+                // defaultValue="YYYY-MM-DD"
                 onChange={onChange}
                 InputLabelProps={{
                     shrink: true,

@@ -1,14 +1,15 @@
 import { Box, Button, Container, Grid, Toolbar } from '@mui/material'
+import cuid from 'cuid'
 import React, { Component } from 'react'
-import EventForm from '../components/Events/EventForm'
-import EventList from '../components/Events/EventList'
+import EventForm from '../features/Events/EventForm'
+import EventList from '../features/Events/EventList'
 import Navbar from '../components/navbar/Navbar'
 
 const eventsFromDashboard = [
   {
     id: '1',
     title: 'Trip to Tower of London',
-    date: '2018-03-27T11:00:00+00:00',
+    date: '2018-03-27',
     category: 'culture',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin ligula eu leo tincidunt, quis scelerisque magna dapibus. Sed eget ipsum vel arcu vehicula ullamcorper.',
@@ -32,7 +33,7 @@ const eventsFromDashboard = [
   {
     id: '2',
     title: 'Trip to Punch and Judy Pub',
-    date: '2018-03-28T14:00:00+00:00',
+    date: '2018-03-28',
     category: 'drinks',
     description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sollicitudin ligula eu leo tincidunt, quis scelerisque magna dapibus. Sed eget ipsum vel arcu vehicula ullamcorper.',
@@ -58,31 +59,81 @@ const eventsFromDashboard = [
 
 export default class EventDashboard extends Component {
 
-    state = {
-        isOpen: false,
-    }
+  state = {
+    events: eventsFromDashboard,
+    isOpen: false,
+    selectedEvent: null
+  }
 
-    HandleFormIsToggle = () => {
-        this.setState((prevState) => ({ isOpen: !prevState.isOpen }))
-    }
+  // HandleFormIsToggle = () => {
+  //   this.setState((prevState) => ({ isOpen: !prevState.isOpen }))
+  // }
 
-    render() {
-        return (
-            <Box sx={{ backgroundColor: 'rgba(0,0,0,0.15)', minHeight: '100vh' }}>
-                <Navbar />
-                <Container sx={{ p: 3 }}>
-                    <Toolbar />
-                    <Grid container spacing={2}>
-                        <Grid item md={7}>
-                            <EventList events={eventsFromDashboard} />
-                        </Grid>
-                        <Grid item md={5}>
-                            <Button onClick={this.HandleFormIsToggle} variant='contained' sx={{ marginBottom: 2 }}>Create Event</Button>
-                            {this.state.isOpen && <EventForm cancelFormOpen={this.HandleFormIsToggle} />}
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Box>
-        )
-    }
+  handleFormOpen = () => {
+    this.setState({
+      isOpen: true,
+      selectedEvent: null
+    })
+  }
+  handleFormCancel = () => {
+    this.setState({
+      isOpen: false,
+    })
+  }
+
+  handleCreateEvent = (newEvent) => {
+    newEvent.id = cuid();
+    newEvent.hostImg = './assets/user.png'
+    this.setState(({ events }) => ({
+      events: [...events, newEvent],
+      isOpen: false
+    }))
+  }
+
+  handleSelectEvent = (event) => {
+    this.setState({
+      selectedEvent: event,
+      isOpen: true,
+    })
+  }
+
+  handleUpdateEvent = (updatedEvent) => {
+    this.setState({
+      events: this.state.events.map((elem, index) => {
+        if (elem.id === updatedEvent.id) {
+          return { ...updatedEvent }
+        } else {
+          return elem
+        }
+      }),
+      isOpen: false,
+      selectedEvent: null
+    })
+  }
+
+  handleDeleteEvent = (id) => {
+    this.setState({
+      events: this.state.events.filter(elem => elem.id !== id)
+    })
+  }
+
+  render() {
+    return (
+          <Grid container spacing={2}>
+            <Grid item md={7}>
+              <EventList events={this.state.events} selectEvent={this.handleSelectEvent} deleteEvent={this.handleDeleteEvent} />
+            </Grid>
+            <Grid item md={5}>
+              <Button onClick={this.handleFormOpen} variant='contained' sx={{ marginBottom: 2 }}>Create Event</Button>
+              {this.state.isOpen && <EventForm
+                key={this.state.selectedEvent ? this.state.selectedEvent.id : 0} // to update the state of form while selecting other events 
+                createEvent={this.handleCreateEvent} // to send the selected Event to form
+                cancelFormOpen={this.handleFormCancel}
+                selectedEvent={this.state.selectedEvent}
+                updateEvent={this.handleUpdateEvent}
+              />}
+            </Grid>
+          </Grid>
+    )
+  }
 }
