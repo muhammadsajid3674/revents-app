@@ -13,22 +13,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Container, createTheme, Menu, MenuItem, Stack, ThemeProvider } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Link, useNavigate } from 'react-router-dom';
+import { Container } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { SignOutMenu } from '../../features/NavMenus/SignOutMenu';
+import { SignInMenu } from '../../features/NavMenus/SignInMenu';
+import { withRouter } from 'react-router-dom';
 
 const drawerWidth = 240;
-
-const lightTheme = createTheme({
-    palette: {
-        light: {
-            main: '#fff',
-            // contrastText: '#000',
-        },
-    },
-});
-
-export default function Navbar(props) {
+function Navbar(props) {
 
     const navigate = useNavigate()
     const { window } = props;
@@ -82,14 +74,14 @@ export default function Navbar(props) {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     const [auth, setAuth] = React.useState(false);
-    const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const handleSignInMenu = () => {
+        setAuth(true)
+    }
+    const handleSignOutMenu = () => {
+        setAuth(false)
+        navigate('/')
+    }
 
     return (
         <React.Fragment>
@@ -138,45 +130,7 @@ export default function Navbar(props) {
                                 Create Event
                             </Button>
                         </Box>
-                        {auth ? (
-                            <div>
-                                <IconButton
-                                    size="large"
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
-                                    onClick={handleMenu}
-                                    color="inherit"
-                                >
-                                    <AccountCircle />
-                                </IconButton>
-                                <Menu
-                                    id="menu-appbar"
-                                    anchorEl={anchorEl}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleClose}
-                                >
-                                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                                </Menu>
-                            </div>
-                        ) : (
-                            <Stack direction="row">
-                                <ThemeProvider theme={lightTheme}>
-                                    <Button variant="standard" color='light'>Log in</Button>
-                                    <Button variant="standard" color='light'>Sign up</Button>
-                                </ThemeProvider>
-                            </Stack>
-                        )}
+                        {auth ? <SignInMenu signOut={handleSignOutMenu} /> : <SignOutMenu signIn={handleSignInMenu} />}
                     </Toolbar>
                 </Container>
             </AppBar>
@@ -200,3 +154,4 @@ export default function Navbar(props) {
         </React.Fragment>
     );
 }
+export default Navbar;

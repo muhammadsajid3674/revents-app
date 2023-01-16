@@ -30,7 +30,7 @@ function SubRouter() {
                     <Route path='event/:id' element={<UserDetailedPage />} />
                     <Route path='people' element={<PeopleDashboard />} />
                     <Route path='profile/:id' element={<UserDetailedPage />} />
-                    <Route path='settings' element={<SettingDashboard />} />
+                    <Route path='settings/*' element={<SettingDashboard />} />
                     <Route path='createEvent' element={<EventForm />} />
                 </Routes>
             </Container>
