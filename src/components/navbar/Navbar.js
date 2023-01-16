@@ -15,10 +15,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Container, createTheme, Menu, MenuItem, Stack, ThemeProvider } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Link, useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
-const navItems = ['Events', 'People'];
-const pages = ['Login', 'Signup'];
 
 const lightTheme = createTheme({
     palette: {
@@ -30,6 +29,8 @@ const lightTheme = createTheme({
 });
 
 export default function Navbar(props) {
+
+    const navigate = useNavigate()
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -39,25 +40,41 @@ export default function Navbar(props) {
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" sx={{ 
+            <Typography variant="a" sx={{
                 my: 2,
                 fontFamily: 'monospace',
                 fontWeight: 700,
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
-                 }}>
+            }}
+                onClick={() => { navigate('/') }}
+            >
                 REVENTS
             </Typography>
             <Divider />
             <List>
-                {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary={item} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
+                <ListItem disablePadding>
+                    <ListItemButton sx={{ textAlign: 'center' }}>
+                        <ListItemText onClick={() => { navigate('event') }}>
+                            Events
+                        </ListItemText>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton sx={{ textAlign: 'center' }}>
+                        <ListItemText onClick={() => { navigate('people') }}>
+                            People
+                        </ListItemText>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton sx={{ textAlign: 'center' }}>
+                        <ListItemText onClick={() => { navigate('createEvent') }}>
+                            Create Event
+                        </ListItemText>
+                    </ListItemButton>
+                </ListItem>
             </List>
         </Box>
     );
@@ -100,16 +117,26 @@ export default function Navbar(props) {
                                 letterSpacing: '.3rem',
                                 color: 'inherit',
                                 textDecoration: 'none',
+                                '&:hover': {
+                                    cursor: 'pointer'
+                                }
                             }}
+                            onClick={() => { navigate('/') }}
                         >
                             REVENTS
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            {navItems.map((item) => (
-                                <Button key={item} sx={{ color: '#fff' }}>
-                                    {item}
-                                </Button>
-                            ))}
+                            <Button sx={{ color: '#fff' }} onClick={() => { navigate('event') }}>Event</Button>
+                            <Button sx={{ color: '#fff' }} onClick={() => { navigate('people') }}>People</Button>
+                            <Button
+                                variant='contained'
+                                color='success'
+                                sx={{ color: '#fff' }}
+                                onClick={() => {
+                                    navigate('createEvent')
+                                }}>
+                                Create Event
+                            </Button>
                         </Box>
                         {auth ? (
                             <div>
