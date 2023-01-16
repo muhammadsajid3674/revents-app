@@ -1,23 +1,13 @@
-import { Button, createTheme, Stack, ThemeProvider } from '@mui/material'
+import { Stack } from '@mui/material'
 import React from 'react'
-
-const lightTheme = createTheme({
-    palette: {
-        light: {
-            main: '#fff',
-            // contrastText: '#000',
-        },
-    },
-});
+import { ThemeBtnSec } from '../../components/button/ThemeBtn'
 
 
 export const SignOutMenu = (props) => {
     return (
-        <Stack direction="row">
-            <ThemeProvider theme={lightTheme}>
-                <Button onClick={props.signIn} variant="standard" color='light'>Log in</Button>
-                <Button variant="standard" color='light'>Register</Button>
-            </ThemeProvider>
+        <Stack spacing={1} direction="row">
+                <ThemeBtnSec onClick={props.signIn} variant="standard" color='light' label='Log in'/>
+                <ThemeBtnSec variant="standard" color='light' label='Register'/>
         </Stack>
     )
 }

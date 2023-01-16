@@ -1,7 +1,7 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { ThemeBtnHome } from '../components/button/ThemeBtn';
 export const HomePage = () => {
   const navigate = useNavigate();
   return (
@@ -11,8 +11,9 @@ export const HomePage = () => {
       alignItems: 'center',
       minHeight: '100vh',
       flexDirection: 'column',
-      backgroundColor: '#4b6cb7 !important',
-      background: 'linear-gradient(to right, #4b6cb7, #182848)'
+      gap: 3
+      // backgroundColor: '#4b6cb7 !important',
+      // background: 'linear-gradient(to right, #4b6cb7, #182848)'
 
     }}>
       <Typography variant="h2" sx={{
@@ -20,13 +21,12 @@ export const HomePage = () => {
         fontFamily: 'monospace',
         fontWeight: 700,
         letterSpacing: '.3rem',
-        color: '#fff',
         textDecoration: 'none',
       }}
       >
         REVENTS
       </Typography>
-      <Button variant='contained' onClick={() => { navigate('event') }}>Get Started</Button>
+      <ThemeBtnHome onClick={() => { navigate('event') }} label='Get Started'/>
     </Box>
   )
 }

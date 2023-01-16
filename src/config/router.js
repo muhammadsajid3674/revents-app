@@ -8,6 +8,7 @@ import EventForm from '../features/Events/EventForm';
 import { Container, Toolbar } from '@mui/material';
 import Navbar from '../components/navbar/Navbar';
 import { Fragment } from 'react';
+import NotFound from '../screens/NotFoundPage';
 
 function AppRouter() {
     return (
@@ -32,6 +33,7 @@ function SubRouter() {
                     <Route path='profile/:id' element={<UserDetailedPage />} />
                     <Route path='settings/*' element={<SettingDashboard />} />
                     <Route path='createEvent' element={<EventForm />} />
+                    <Route path='*' element={<NotFound />} />
                 </Routes>
             </Container>
         </Fragment>

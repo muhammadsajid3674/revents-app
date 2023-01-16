@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import EventForm from '../features/Events/EventForm'
 import EventList from '../features/Events/EventList'
 import Navbar from '../components/navbar/Navbar'
+import { ThemeBtnPri } from '../components/button/ThemeBtn'
 
 const eventsFromDashboard = [
   {
@@ -124,7 +125,7 @@ export default class EventDashboard extends Component {
               <EventList events={this.state.events} selectEvent={this.handleSelectEvent} deleteEvent={this.handleDeleteEvent} />
             </Grid>
             <Grid item md={5}>
-              <Button onClick={this.handleFormOpen} variant='contained' sx={{ marginBottom: 2 }}>Create Event</Button>
+              <ThemeBtnPri onClick={this.handleFormOpen} variant='contained' sx={{ marginBottom: 2 }} label='Create Event'/>
               {this.state.isOpen && <EventForm
                 key={this.state.selectedEvent ? this.state.selectedEvent.id : 0} // to update the state of form while selecting other events 
                 createEvent={this.handleCreateEvent} // to send the selected Event to form

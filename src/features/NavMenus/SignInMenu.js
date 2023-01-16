@@ -72,7 +72,7 @@ export const SignInMenu = (props) => {
                     </ListItemIcon>
                     <ListItemText>My Profile</ListItemText>
                 </MenuItem>
-                <MenuItem onClick={() => { navigate('settings') }}>
+                <MenuItem onClick={() => { navigate('settings'); setAnchorEl(null); }}>
                     <ListItemIcon>
                         <SettingsIcon />
                     </ListItemIcon>

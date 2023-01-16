@@ -3,6 +3,7 @@ import { Avatar, Box, Button, Divider, Grid, Link, Paper, Stack, Typography } fr
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import EventListAttendee from './EventListAttendee'
+import { ThemeBtnPri } from '../../components/button/ThemeBtn';
 
 export default class EventListItems extends Component {
     render() {
@@ -50,7 +51,7 @@ export default class EventListItems extends Component {
                 <Box style={{ padding: '10px 15px' }}>
                     <Stack spacing={1} direction='row' alignItems='center'>
                         <Typography variant='body2' style={{ flexGrow: 1 }}>{event.description}</Typography>
-                        <Button onClick={() => selectEvent(event)} variant='contained'>View</Button>
+                        <ThemeBtnPri onClick={() => selectEvent(event)} variant='contained' label='View'/>
                         <Button onClick={() => deleteEvent(event.id)} variant='contained' color='error'>delete</Button>
                     </Stack>
                 </Box>

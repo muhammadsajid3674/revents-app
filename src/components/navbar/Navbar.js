@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { SignOutMenu } from '../../features/NavMenus/SignOutMenu';
 import { SignInMenu } from '../../features/NavMenus/SignInMenu';
 import { withRouter } from 'react-router-dom';
+import { ThemeBtnSec } from '../button/ThemeBtn';
 
 const drawerWidth = 240;
 function Navbar(props) {
@@ -86,9 +87,12 @@ function Navbar(props) {
     return (
         <React.Fragment>
             <CssBaseline />
-            <AppBar component="nav">
+            <AppBar component="nav" sx={{
+                backgroundColor: '#4b6cb7 !important',
+                background: 'linear-gradient(to right, #4b6cb7, #182848)'
+            }}>
                 <Container>
-                    <Toolbar sx={{ justifyContent: 'space-between' }}>
+                    <Toolbar>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
@@ -117,18 +121,18 @@ function Navbar(props) {
                         >
                             REVENTS
                         </Typography>
-                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1, flexGrow: 1 }}>
                             <Button sx={{ color: '#fff' }} onClick={() => { navigate('event') }}>Event</Button>
+                            <Divider orientation="vertical" flexItem light={true} />
                             <Button sx={{ color: '#fff' }} onClick={() => { navigate('people') }}>People</Button>
-                            <Button
+                            <Divider orientation="vertical" flexItem />
+                            <ThemeBtnSec
                                 variant='contained'
-                                color='success'
-                                sx={{ color: '#fff' }}
                                 onClick={() => {
                                     navigate('createEvent')
-                                }}>
-                                Create Event
-                            </Button>
+                                }}
+                                label='Create Event'
+                            />
                         </Box>
                         {auth ? <SignInMenu signOut={handleSignOutMenu} /> : <SignOutMenu signIn={handleSignInMenu} />}
                     </Toolbar>

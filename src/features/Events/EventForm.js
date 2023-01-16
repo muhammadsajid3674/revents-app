@@ -1,5 +1,6 @@
 import { Box, Button, createTheme, Grid, Paper, Stack, TextField, ThemeProvider, Typography } from '@mui/material'
 import React, { Component } from 'react'
+import { ThemeBtnPri } from '../../components/button/ThemeBtn'
 import MuiDatePicker from '../../components/Input/Datepicker'
 
 let btnTheme = createTheme({
@@ -59,7 +60,7 @@ export default class EventForm extends Component {
                             <TextField name='venue' value={this.state.venue} onChange={this.handleFieldChange} label="Venue" variant="standard" />
                             <TextField name='hostedBy' value={this.state.hostedBy} onChange={this.handleFieldChange} label="Hosted By" variant="standard" />
                             <Stack spacing={1} direction='row'>
-                                <Button onClick={this.handleSubmit} variant='contained' >Submit</Button>
+                                <ThemeBtnPri onClick={this.handleSubmit} variant='contained' label='Submit'/>
                                 <ThemeProvider theme={btnTheme}>
                                     <Button onClick={this.props.cancelFormOpen} variant='contained' color='grey'>Cancel</Button>
                                 </ThemeProvider>
