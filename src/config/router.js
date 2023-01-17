@@ -4,12 +4,12 @@ import EventDashboard from '../screens/EventDashboard';
 import { UserDetailedPage } from '../features/user/UserDetails/UserDetailedPage';
 import { PeopleDashboard } from '../screens/PeopleDashboard';
 import { SettingDashboard } from '../screens/SettingDashboard';
-import EventForm from '../features/Events/EventForm';
 import { Container, Toolbar } from '@mui/material';
 import Navbar from '../components/navbar/Navbar';
 import { Fragment } from 'react';
 import NotFound from '../screens/NotFoundPage';
 import TestComponent from '../features/Test/TestComponent';
+import EventForm from '../features/Events/EventForm/EventForm';
 
 function AppRouter() {
     return (

@@ -1,7 +1,8 @@
 import { Box, Button, createTheme, Grid, Paper, Stack, TextField, ThemeProvider, Typography } from '@mui/material'
+import cuid from 'cuid'
 import React, { Component } from 'react'
-import { ThemeBtnPri } from '../../components/button/ThemeBtn'
-import MuiDatePicker from '../../components/Input/Datepicker'
+import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
+import MuiDatePicker from '../../../components/Input/Datepicker'
 
 let btnTheme = createTheme({
     palette: {
@@ -18,6 +19,8 @@ export default class EventForm extends Component {
         city: '',
         venue: '',
         hostedBy: '',
+        id: cuid(),
+        hostImg: '../../../assets/user.png',
     }
 
     componentDidMount() {
