@@ -9,6 +9,7 @@ import { Container, Toolbar } from '@mui/material';
 import Navbar from '../components/navbar/Navbar';
 import { Fragment } from 'react';
 import NotFound from '../screens/NotFoundPage';
+import TestComponent from '../features/Test/TestComponent';
 
 function AppRouter() {
     return (
@@ -33,6 +34,7 @@ function SubRouter() {
                     <Route path='profile/:id' element={<UserDetailedPage />} />
                     <Route path='settings/*' element={<SettingDashboard />} />
                     <Route path='createEvent' element={<EventForm />} />
+                    <Route path='test' element={<TestComponent />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
             </Container>

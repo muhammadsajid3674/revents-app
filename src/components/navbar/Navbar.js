@@ -126,6 +126,8 @@ function Navbar(props) {
                             <Divider orientation="vertical" flexItem light={true} />
                             <Button sx={{ color: '#fff' }} onClick={() => { navigate('people') }}>People</Button>
                             <Divider orientation="vertical" flexItem />
+                            <Button sx={{ color: '#fff' }} onClick={() => { navigate('test') }}>Test</Button>
+                            <Divider orientation="vertical" flexItem />
                             <ThemeBtnSec
                                 variant='contained'
                                 onClick={() => {
