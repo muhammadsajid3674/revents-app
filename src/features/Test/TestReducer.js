@@ -1,20 +1,18 @@
+import { createReducer } from "../../config/common/util/reducerUtil";
 import actionType from "./TestAction";
 
 const initialState = {
     data: 45
 }
 
-const testReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case actionType.INCREMENT_COUNT:
-            return { ...state, data: state.data + 1 };
-
-        case actionType.DECREMENT_COUNT:
-            return { ...state, data: state.data - 1 };
-
-        default:
-            return state;
-    }
+const incrementCount = (state) => {
+    return { ...state, data: state.data + 1 };
+}
+const decrementCount = (state) => {
+    return { ...state, data: state.data - 1 };
 }
 
-export default testReducer;
+export default createReducer(initialState, {
+    [actionType.INCREMENT_COUNT] : incrementCount,
+    [actionType.DECREMENT_COUNT] : decrementCount,
+});
