@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import React from 'react'
-import Navbar from './components/navbar/Navbar'
 import AppRouter from './config/router'
+import './App.css'
 
 const App = () => {
   return (

@@ -10,6 +10,7 @@ import { Fragment } from 'react';
 import NotFound from '../screens/NotFoundPage';
 import TestComponent from '../features/Test/TestComponent';
 import EventForm from '../features/Events/EventForm/EventForm';
+import { EventDetailPage } from '../features/Events/EventsDetails/EventDetailPage';
 
 function AppRouter() {
     return (
@@ -29,7 +30,7 @@ function SubRouter() {
                 <Toolbar />
                 <Routes>
                     <Route path='event' element={<EventDashboard />} />
-                    <Route path='event/:id' element={<UserDetailedPage />} />
+                    <Route path='event/:id' element={<EventDetailPage />} />
                     <Route path='people' element={<PeopleDashboard />} />
                     <Route path='profile/:id' element={<UserDetailedPage />} />
                     <Route path='settings/*' element={<SettingDashboard />} />

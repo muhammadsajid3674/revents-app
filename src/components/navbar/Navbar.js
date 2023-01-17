@@ -89,7 +89,7 @@ function Navbar(props) {
             <CssBaseline />
             <AppBar component="nav" sx={{
                 backgroundColor: '#4b6cb7 !important',
-                background: 'linear-gradient(to right, #4b6cb7, #182848)'
+                background: 'linear-gradient(to left, #4b6cb7, #182848)'
             }}>
                 <Container>
                     <Toolbar>
