@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function EventListItems(props) {
     const navigate = useNavigate()
-    const { event, selectEvent, deleteEvent } = props;
+    const { event, deleteEvent } = props;
     return (
         <Paper>
             <Box style={{ padding: '10px 15px' }}>

@@ -7,7 +7,7 @@ export default class EventList extends Component {
         return (
             <Stack spacing={2}>
                 {this.props.events && this.props.events.map((elem, index) => {
-                   return <EventListItems key={index} event={elem} selectEvent={this.props.selectEvent} deleteEvent={this.props.deleteEvent} />
+                   return <EventListItems key={index} event={elem} deleteEvent={this.props.deleteEvent} />
                 })}
             </Stack>
         )

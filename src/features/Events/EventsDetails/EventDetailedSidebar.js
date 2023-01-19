@@ -21,7 +21,7 @@ const EventDetailedSidebar = ({ attendees }) => {
         <Typography variant='body1' sx={{ fontWeight: 600 }}>{attendees && attendees.length} {attendees && attendees.length === 1 ? 'person' : 'people' } Going</Typography>
       </Box>
       <Box sx={{ p: 1.5 }}>
-        {attendees.map(attendees => (
+        {attendees && attendees.map(attendees => (
           <Grid key={attendees.id} container spacing={2} alignItems='center'>
             <Grid item md={3}>
               <img src={attendees.photoURL} style={{ maxWidth: '100%' }} alt='' />

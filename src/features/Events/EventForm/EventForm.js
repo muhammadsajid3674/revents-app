@@ -2,9 +2,10 @@ import { Box, Button, createTheme, Grid, Paper, Stack, TextField, ThemeProvider,
 import cuid from 'cuid'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { useParams } from 'react-router-dom'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
+import { createEvent, updateEvent } from '../EventActions';
 import MuiDatePicker from '../../../components/Input/Datepicker'
+import { useNavigate } from 'react-router-dom'
 
 let btnTheme = createTheme({
     palette: {
@@ -14,31 +15,10 @@ let btnTheme = createTheme({
     }
 })
 
-const mapStateToProps = (state, ownProps) => {
-    debugger
-    // const eventId = ownProps.matches.route.id;
-
-    // let event = {
-    //     title: '',
-    //     date: '',
-    //     city: '',
-    //     venue: '',
-    //     hostedBy: '',
-    //     id: cuid(),
-    //     hostImg: '../../../assets/user.png',
-    // }
-
-    // if (eventId && state.events.length > 0) {
-    //     event = state.events.filter(event => event.id === eventId)[0]
-    // }
-
-    // return event;
-}
-
-class EventForm extends Component {
+class Kero extends Component {
 
     state = {
-        
+        ...this.props.event
     }
 
     componentDidMount() {
@@ -53,8 +33,15 @@ class EventForm extends Component {
         evt.preventDefault()
         if (this.state.id) {
             this.props.updateEvent(this.state)
+            this.props.navigate(`/event/${this.state.id}`)
         } else {
-            this.props.createEvent(this.state)
+            const newEvent = {
+                ...this.state,
+                id: cuid(),
+                hostImg: '../../../assets/user.png',
+            }
+            this.props.createEvent(newEvent)
+            this.props.navigate(`/event/${newEvent.id}`)
         }
     }
 
@@ -81,9 +68,9 @@ class EventForm extends Component {
                             <TextField name='venue' value={this.state.venue} onChange={this.handleFieldChange} label="Venue" variant="standard" />
                             <TextField name='hostedBy' value={this.state.hostedBy} onChange={this.handleFieldChange} label="Hosted By" variant="standard" />
                             <Stack spacing={1} direction='row'>
-                                <ThemeBtnPri onClick={this.handleSubmit} variant='contained' label='Submit'/>
+                                <ThemeBtnPri onClick={this.handleSubmit} variant='contained' label='Submit' />
                                 <ThemeProvider theme={btnTheme}>
-                                    <Button onClick={this.props.cancelFormOpen} variant='contained' color='grey'>Cancel</Button>
+                                    <Button onClick={() => (window.history.back())} variant='contained' color='grey'>Cancel</Button>
                                 </ThemeProvider>
                             </Stack>
                         </Box>
@@ -94,6 +81,34 @@ class EventForm extends Component {
     }
 }
 
+function EventForm(props) {
+    let navigate = useNavigate();
+    return <Kero {...props} navigate={navigate} />
+}
+
+const mapStateToProps = (state) => {
+    var parts = window.location.pathname.split('/');
+    var lastSegment = parts.pop() || parts.pop();
+
+    let event = {
+        title: '',
+        date: '',
+        city: '',
+        venue: '',
+        hostedBy: '',
+    }
+
+    if (lastSegment && state.events.length > 0) {
+        event = state.events.filter(event => event.id === lastSegment)[0]
+    }
+
+    return { event };
+}
+
+const mapDispatchToProp = {
+    createEvent,
+    updateEvent,
+}
 
 
-export default EventForm;
+export default connect(mapStateToProps, mapDispatchToProp)(EventForm);
