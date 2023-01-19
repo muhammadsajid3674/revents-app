@@ -6,6 +6,9 @@ import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 import { createEvent, updateEvent } from '../EventActions';
 import MuiDatePicker from '../../../components/Input/Datepicker'
 import { useNavigate } from 'react-router-dom'
+import { Field, reduxForm } from 'redux-form'
+import TextInput from '../../../components/ReduxForm/TextInput'
+import TextArea from '../../../components/ReduxForm/TextArea'
 
 let btnTheme = createTheme({
     palette: {
@@ -53,20 +56,28 @@ class Kero extends Component {
 
     render() {
         return (
-            <Paper>
-                <Grid container justifyContent='center' sx={{ p: 2 }}>
-                    <Grid item md={11}>
-                        <Typography variant='h4'>Create Event</Typography>
+            <Grid container >
+                <Grid item md={8}>
+                    <Paper sx={{ p: 4 }}>
                         <Box component='form' sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 4
+                            gap: 1.5
                         }}>
-                            <TextField name='title' value={this.state.title} onChange={this.handleFieldChange} label="Event Title" variant="standard" />
-                            <MuiDatePicker name='date' value={this.state.date} onChange={this.handleFieldChange} label='Event Date' type="date" />
+
+                            <Typography variant='h6'>Event Details</Typography>
+                            <Field label='Event Title' name='title' component={TextInput} placeholder='Give your event a name' />
+                            <Field label='Event Category' name='category' component={TextInput} placeholder='What is your event about?' />
+                            <Field label='Event Description' name='description' component={TextArea} rows='4' placeholder='Tell us about your event' />
+                            <Typography variant='h6'>Event Location Details</Typography>
+                            <Field label='Event City' name='city' component={TextInput} placeholder='Event City' />
+                            <Field label='Event Venue' name='venue' component={TextInput} placeholder='Event Venue' />
+                            <Field label='Event Title' name='date' component={TextInput} placeholder='Event Title' />
+                            {/* <TextField name='title' value={this.state.title} onChange={this.handleFieldChange} label="Event Title" variant="standard" /> */}
+                            {/* <MuiDatePicker name='date' value={this.state.date} onChange={this.handleFieldChange} label='Event Date' type="date" />
                             <TextField name='city' value={this.state.city} onChange={this.handleFieldChange} label="City" variant="standard" />
                             <TextField name='venue' value={this.state.venue} onChange={this.handleFieldChange} label="Venue" variant="standard" />
-                            <TextField name='hostedBy' value={this.state.hostedBy} onChange={this.handleFieldChange} label="Hosted By" variant="standard" />
+                            <TextField name='hostedBy' value={this.state.hostedBy} onChange={this.handleFieldChange} label="Hosted By" variant="standard" /> */}
                             <Stack spacing={1} direction='row'>
                                 <ThemeBtnPri onClick={this.handleSubmit} variant='contained' label='Submit' />
                                 <ThemeProvider theme={btnTheme}>
@@ -74,9 +85,9 @@ class Kero extends Component {
                                 </ThemeProvider>
                             </Stack>
                         </Box>
-                    </Grid>
+                    </Paper>
                 </Grid>
-            </Paper>
+            </Grid>
         )
     }
 }
@@ -111,4 +122,4 @@ const mapDispatchToProp = {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProp)(EventForm);
+export default connect(mapStateToProps, mapDispatchToProp)(reduxForm({ form: 'event' })(EventForm));
