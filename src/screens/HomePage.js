@@ -11,9 +11,9 @@ export const HomePage = () => {
       alignItems: 'center',
       minHeight: '100vh',
       flexDirection: 'column',
-      gap: 3
-      // backgroundColor: '#4b6cb7 !important',
-      // background: 'linear-gradient(to right, #4b6cb7, #182848)'
+      gap: 3,
+      backgroundColor: '#4b6cb7 !important',
+      background: 'linear-gradient(to left, #4b6cb7, #182848)'
 
     }}>
       <Typography variant="h2" sx={{
@@ -22,11 +22,12 @@ export const HomePage = () => {
         fontWeight: 700,
         letterSpacing: '.3rem',
         textDecoration: 'none',
+        color: '#fff'
       }}
       >
         REVENTS
       </Typography>
-      <ThemeBtnHome onClick={() => { navigate('event') }} label='Get Started'/>
+      <ThemeBtnHome onClick={() => { navigate('event') }} label='Get Started' />
     </Box>
   )
 }

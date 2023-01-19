@@ -34,7 +34,7 @@ function SubRouter() {
                     <Route path='people' element={<PeopleDashboard />} />
                     <Route path='profile/:id' element={<UserDetailedPage />} />
                     <Route path='settings/*' element={<SettingDashboard />} />
-                    <Route path='createEvent' element={<EventForm />} />
+                    {['createEvent', 'manage/:id'].map((path, index) => <Route key={index} path={path} element={<EventForm />} />)}
                     <Route path='test' element={<TestComponent />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>

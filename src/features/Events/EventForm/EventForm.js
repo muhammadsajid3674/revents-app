@@ -1,6 +1,8 @@
 import { Box, Button, createTheme, Grid, Paper, Stack, TextField, ThemeProvider, Typography } from '@mui/material'
 import cuid from 'cuid'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 import MuiDatePicker from '../../../components/Input/Datepicker'
 
@@ -11,16 +13,32 @@ let btnTheme = createTheme({
         }
     }
 })
-export default class EventForm extends Component {
+
+const mapStateToProps = (state, ownProps) => {
+    debugger
+    // const eventId = ownProps.matches.route.id;
+
+    // let event = {
+    //     title: '',
+    //     date: '',
+    //     city: '',
+    //     venue: '',
+    //     hostedBy: '',
+    //     id: cuid(),
+    //     hostImg: '../../../assets/user.png',
+    // }
+
+    // if (eventId && state.events.length > 0) {
+    //     event = state.events.filter(event => event.id === eventId)[0]
+    // }
+
+    // return event;
+}
+
+class EventForm extends Component {
 
     state = {
-        title: '',
-        date: '',
-        city: '',
-        venue: '',
-        hostedBy: '',
-        id: cuid(),
-        hostImg: '../../../assets/user.png',
+        
     }
 
     componentDidMount() {
@@ -78,3 +96,4 @@ export default class EventForm extends Component {
 
 
 
+export default EventForm;
