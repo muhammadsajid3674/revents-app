@@ -5,7 +5,7 @@ const TextInput = ({ input, width, type, placeholder, label, meta: { touched, er
     return (
         <FormControl>
             <OutlinedInput error={touched && !!error} {...input} placeholder={placeholder} type={type} />
-            {touched && error && <FormHelperText>{error}</FormHelperText>}
+            {touched && error && <FormHelperText error>{error}</FormHelperText>}
         </FormControl>
     )
 }

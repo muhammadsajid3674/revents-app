@@ -1,14 +1,16 @@
-import { Box, Button, createTheme, Grid, Paper, Stack, TextField, ThemeProvider, Typography } from '@mui/material'
+import { Box, Button, createTheme, Grid, Paper, Stack, ThemeProvider, Typography } from '@mui/material'
 import cuid from 'cuid'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 import { createEvent, updateEvent } from '../EventActions';
-import MuiDatePicker from '../../../components/Input/Datepicker'
 import { useNavigate } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 import TextInput from '../../../components/ReduxForm/TextInput'
 import TextArea from '../../../components/ReduxForm/TextArea'
+import SelectInput from '../../../components/ReduxForm/Select'
+import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired } from 'revalidate'
+import DatePickerField from '../../../components/ReduxForm/DatepickerField'
 
 let btnTheme = createTheme({
     palette: {
@@ -18,43 +20,60 @@ let btnTheme = createTheme({
     }
 })
 
+const validate = combineValidators({
+    title: isRequired({ message: 'The event title is required' }),
+    category: isRequired({ message: 'The category is required' }),
+    description: composeValidators(
+        isRequired({ message: 'Please enter a description' }),
+        hasLengthGreaterThan(5)({ message: 'Description needs to be at least 5 characters' })
+    )(),
+    city: isRequired({ message: 'city' }),
+    venue: isRequired({ message: 'venue' }),
+    date: isRequired({ message: 'date' }),
+})
+
+const category = [
+    { key: 'drinks', option: 'Drinks', value: 'drinks' },
+    { key: 'culture', option: 'Culture', value: 'culture' },
+    { key: 'film', option: 'Film', value: 'film' },
+    { key: 'food', option: 'Food', value: 'food' },
+    { key: 'music', option: 'Music', value: 'music' },
+    { key: 'travel', option: 'Travel', value: 'travel' },
+]
+
 class Kero extends Component {
 
-    state = {
-        ...this.props.event
-    }
+    // componentDidMount() {
+    //     if (this.props.selectedEvent !== null) {
+    //         this.setState({
+    //             ...this.props.selectedEvent
+    //         })
+    //     }
+    // } // to render the selected Event values
 
-    componentDidMount() {
-        if (this.props.selectedEvent !== null) {
-            this.setState({
-                ...this.props.selectedEvent
-            })
-        }
-    } // to render the selected Event values
-
-    handleSubmit = (evt) => {
-        evt.preventDefault()
-        if (this.state.id) {
-            this.props.updateEvent(this.state)
-            this.props.navigate(`/event/${this.state.id}`)
+    onFormSubmit = (values) => {
+        if (this.props.initialValues) {
+            this.props.updateEvent(values)
+            this.props.navigate(`/event/${this.props.initialValues.id}`)
         } else {
             const newEvent = {
-                ...this.state,
+                ...values,
                 id: cuid(),
                 hostImg: '../../../assets/user.png',
+                hostedBy: 'Bob'
             }
             this.props.createEvent(newEvent)
             this.props.navigate(`/event/${newEvent.id}`)
         }
     }
 
-    handleFieldChange = ({ target: { name, value } }) => {
-        this.setState({
-            [name]: value
-        });
-    };
-
+    // handleFieldChange = ({ target: { name, value } }) => {
+    //     this.setState({
+    //         [name]: value
+    //     });
+    // };
     render() {
+        const { navigate, initialValues, handleSubmit, invalid, pristine, submitting } = this.props;
         return (
             <Grid container >
                 <Grid item md={8}>
@@ -67,21 +86,18 @@ class Kero extends Component {
 
                             <Typography variant='h6'>Event Details</Typography>
                             <Field label='Event Title' name='title' component={TextInput} placeholder='Give your event a name' />
-                            <Field label='Event Category' name='category' component={TextInput} placeholder='What is your event about?' />
+                            <Field label='Event Category' name='category' component={SelectInput} dataSource={category} placeholder='What is your event about?' />
                             <Field label='Event Description' name='description' component={TextArea} rows='4' placeholder='Tell us about your event' />
                             <Typography variant='h6'>Event Location Details</Typography>
                             <Field label='Event City' name='city' component={TextInput} placeholder='Event City' />
                             <Field label='Event Venue' name='venue' component={TextInput} placeholder='Event Venue' />
-                            <Field label='Event Title' name='date' component={TextInput} placeholder='Event Title' />
-                            {/* <TextField name='title' value={this.state.title} onChange={this.handleFieldChange} label="Event Title" variant="standard" /> */}
-                            {/* <MuiDatePicker name='date' value={this.state.date} onChange={this.handleFieldChange} label='Event Date' type="date" />
-                            <TextField name='city' value={this.state.city} onChange={this.handleFieldChange} label="City" variant="standard" />
-                            <TextField name='venue' value={this.state.venue} onChange={this.handleFieldChange} label="Venue" variant="standard" />
-                            <TextField name='hostedBy' value={this.state.hostedBy} onChange={this.handleFieldChange} label="Hosted By" variant="standard" /> */}
+                            <Field label='Event Date' name='date' component={DatePickerField} placeholder='Event Title' />
                             <Stack spacing={1} direction='row'>
-                                <ThemeBtnPri onClick={this.handleSubmit} variant='contained' label='Submit' />
+                                <ThemeBtnPri disabled={invalid || submitting || pristine} onClick={handleSubmit(this.onFormSubmit)} variant='contained' label='Submit' />
                                 <ThemeProvider theme={btnTheme}>
-                                    <Button onClick={() => (window.history.back())} variant='contained' color='grey'>Cancel</Button>
+                                    <Button
+                                        onClick={() => (
+                                            initialValues ? navigate(`/event/${initialValues.id}`) : navigate('/event'))} variant='contained' color='grey'>Cancel</Button>
                                 </ThemeProvider>
                             </Stack>
                         </Box>
@@ -101,19 +117,15 @@ const mapStateToProps = (state) => {
     var parts = window.location.pathname.split('/');
     var lastSegment = parts.pop() || parts.pop();
 
-    let event = {
-        title: '',
-        date: '',
-        city: '',
-        venue: '',
-        hostedBy: '',
-    }
+    let event = {};
 
     if (lastSegment && state.events.length > 0) {
         event = state.events.filter(event => event.id === lastSegment)[0]
     }
 
-    return { event };
+    return {
+        initialValues: event
+    };
 }
 
 const mapDispatchToProp = {
@@ -122,4 +134,4 @@ const mapDispatchToProp = {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProp)(reduxForm({ form: 'event' })(EventForm));
+export default connect(mapStateToProps, mapDispatchToProp)(reduxForm({ form: 'eventFrom', validate })(EventForm));

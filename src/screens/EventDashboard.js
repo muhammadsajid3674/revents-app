@@ -12,21 +12,21 @@ class EventDashboard extends Component {
 
   render() {
     return (
-          <Grid container spacing={2}>
-            <Grid item md={7}>
-              <EventList events={this.props.events} deleteEvent={this.handleDeleteEvent} />
-            </Grid>
-            <Grid item md={5}>
-              <h2>  Activity Feed</h2>
-            </Grid>
-          </Grid>
+      <Grid container spacing={2}>
+        <Grid item md={7}>
+          <EventList events={this.props.events} deleteEvent={this.handleDeleteEvent} />
+        </Grid>
+        <Grid item md={5}>
+          <h2>Activity Feed</h2>
+        </Grid>
+      </Grid>
     )
   }
 }
 
 const mapStateToProp = (state) => {
   return {
-    events : state.events
+    events: state.events
   }
 }
 
