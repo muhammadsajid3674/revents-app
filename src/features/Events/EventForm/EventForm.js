@@ -11,6 +11,7 @@ import TextArea from '../../../components/ReduxForm/TextArea'
 import SelectInput from '../../../components/ReduxForm/Select'
 import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired } from 'revalidate'
 import DatePickerField from '../../../components/ReduxForm/DatepickerField'
+import DateTimePickerField from '../../../components/ReduxForm/TmeDatePicker'
 
 let btnTheme = createTheme({
     palette: {
@@ -27,9 +28,9 @@ const validate = combineValidators({
         isRequired({ message: 'Please enter a description' }),
         hasLengthGreaterThan(5)({ message: 'Description needs to be at least 5 characters' })
     )(),
-    city: isRequired({ message: 'city' }),
-    venue: isRequired({ message: 'venue' }),
-    date: isRequired({ message: 'date' }),
+    city: isRequired({ message: 'The event city is required' }),
+    venue: isRequired({ message: 'The event venue is required' }),
+    date: isRequired({ message: 'The event date is required' }),
 })
 
 const category = [
@@ -91,7 +92,7 @@ class Kero extends Component {
                             <Typography variant='h6'>Event Location Details</Typography>
                             <Field label='Event City' name='city' component={TextInput} placeholder='Event City' />
                             <Field label='Event Venue' name='venue' component={TextInput} placeholder='Event Venue' />
-                            <Field label='Event Date' name='date' component={DatePickerField} placeholder='Event Title' />
+                            <Field label='Event Date' name='date' component={DateTimePickerField} placeholder='Event Title' />
                             <Stack spacing={1} direction='row'>
                                 <ThemeBtnPri disabled={invalid || submitting || pristine} onClick={handleSubmit(this.onFormSubmit)} variant='contained' label='Submit' />
                                 <ThemeProvider theme={btnTheme}>

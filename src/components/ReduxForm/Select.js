@@ -3,18 +3,19 @@ import React from 'react'
 
 const SelectInput = ({ input, width, type, placeholder, label, multiple, dataSource, meta: { touched, error } }) => {
   return (
-    <FormControl fullWidth >
+    <FormControl fullWidth error={touched && !!error}>
       <InputLabel id="demo-simple-select-label" >{label}</InputLabel>
       <Select
-        error={touched && !!error}
         defaultValue=""
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={input.value || undefined}
         label={label}
-
-        onChange={(e, data) => input.onChange(data.value)}
+        onChange={(e, data) => {
+          input.onChange(data.props.value)
+        }}
         placeholder={placeholder}
+        onBlur={input.onBlur}
       >
         {dataSource && dataSource.length > 0 ? dataSource.map((e, i) => {
           return <MenuItem key={i} value={e['value']}>
