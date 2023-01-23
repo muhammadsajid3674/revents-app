@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux';
-import PlacesInput from '../../components/ReduxForm/PlacesAutocompleteInput';
+import { ThemeBtnPri } from '../../components/button/ThemeBtn';
 import { decrementCount, incrementCount } from './TestActionCreators';
+import { openModal } from '../Modals/ModalActions';
 import PlacesAutocompleteInput from './TestPlacesAutocomplete';
 
 // Class Component
@@ -13,6 +14,9 @@ class TestComponent extends Component {
         <button onClick={this.props.decrementCount}>-</button>
         <p>Initial State is: {this.props.state}</p>
         <button onClick={this.props.incrementCount}>+</button>
+        <ThemeBtnPri label='Open Modal' onClick={() => {
+          this.props.openModal('TestModal', {data: 42})
+        }}/>
 
         <PlacesAutocompleteInput />
         {/* <PlacesInput /> */}
@@ -27,7 +31,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   incrementCount,
-  decrementCount
+  decrementCount,
+  openModal
 } // Actions Dispatch
 
 export default connect(mapStateToProps, mapDispatchToProps)(TestComponent);

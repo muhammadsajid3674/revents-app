@@ -46,7 +46,7 @@ export function ThemeBtnPri(props) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Button disabled={disabled} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} onClick={onClick} className={className} style={{ fontWeight: 600 }}>{label}</Button>
+            <Button disabled={disabled} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} onClick={onClick} className={className} style={{ fontWeight: 600, marginTop: '10px' }}>{label}</Button>
         </ThemeProvider>
     );
 }

@@ -10,7 +10,7 @@ export default function DateTimePickerField({ input, width, type, label, multipl
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
-                renderInput={(props) => <TextField {...props}
+                renderInput={(props) => <TextField margin='dense' {...props}
                     value={input.value || null}
                     onBlur={input.onBlur}
                     error={touched && !!error}

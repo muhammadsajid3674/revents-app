@@ -10,7 +10,7 @@ import TextInput from '../../../components/ReduxForm/TextInput'
 import TextArea from '../../../components/ReduxForm/TextArea'
 import SelectInput from '../../../components/ReduxForm/Select'
 import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired } from 'revalidate'
-import DateTimePickerField from '../../../components/ReduxForm/TmeDatePicker'
+import DateTimePickerField from '../../../components/ReduxForm/TimeDatePicker'
 
 let btnTheme = createTheme({
     palette: {
@@ -83,7 +83,6 @@ class Kero extends Component {
                         <Box component='form' sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: 1.5
                         }}>
                             <Typography variant='h6'>Event Details</Typography>
                             <Field label='Event Title' name='title' component={TextInput} placeholder='Give your event a name' />
