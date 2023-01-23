@@ -10,7 +10,6 @@ import TextInput from '../../../components/ReduxForm/TextInput'
 import TextArea from '../../../components/ReduxForm/TextArea'
 import SelectInput from '../../../components/ReduxForm/Select'
 import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired } from 'revalidate'
-import DatePickerField from '../../../components/ReduxForm/DatepickerField'
 import DateTimePickerField from '../../../components/ReduxForm/TmeDatePicker'
 
 let btnTheme = createTheme({
@@ -21,6 +20,7 @@ let btnTheme = createTheme({
     }
 })
 
+// Validation
 const validate = combineValidators({
     title: isRequired({ message: 'The event title is required' }),
     category: isRequired({ message: 'The category is required' }),
@@ -33,6 +33,7 @@ const validate = combineValidators({
     date: isRequired({ message: 'The event date is required' }),
 })
 
+// Category Dropdown
 const category = [
     { key: 'drinks', option: 'Drinks', value: 'drinks' },
     { key: 'culture', option: 'Culture', value: 'culture' },
@@ -84,7 +85,6 @@ class Kero extends Component {
                             flexDirection: 'column',
                             gap: 1.5
                         }}>
-
                             <Typography variant='h6'>Event Details</Typography>
                             <Field label='Event Title' name='title' component={TextInput} placeholder='Give your event a name' />
                             <Field label='Event Category' name='category' component={SelectInput} dataSource={category} placeholder='What is your event about?' />
@@ -109,6 +109,7 @@ class Kero extends Component {
     }
 }
 
+// Render Class in Functional Component to use Hooks
 function EventForm(props) {
     let navigate = useNavigate();
     return <Kero {...props} navigate={navigate} />
@@ -118,7 +119,14 @@ const mapStateToProps = (state) => {
     var parts = window.location.pathname.split('/');
     var lastSegment = parts.pop() || parts.pop();
 
-    let event = {};
+    let event = {
+        title: "",
+        category: "",
+        description: "",
+        city: "",
+        venue: "",
+        date: "",
+    };
 
     if (lastSegment && state.events.length > 0) {
         event = state.events.filter(event => event.id === lastSegment)[0]

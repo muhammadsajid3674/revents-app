@@ -6,7 +6,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 export default function DateTimePickerField({ input, width, type, label, multiple, dataSource, meta: { touched, error }, ...rest }) {
-    const [value, setValue] = React.useState();
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -18,7 +17,7 @@ export default function DateTimePickerField({ input, width, type, label, multipl
                     helperText={touched && error ? error : null}
                 />}
                 label="DateTimePicker"
-                value={input.value}
+                value={input.value || null}
                 onChange={(newDate) => {
                     let time = newDate.$d.toLocaleTimeString('en-US');
                     let date = newDate.$d.toLocaleDateString();

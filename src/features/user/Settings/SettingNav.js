@@ -6,8 +6,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import Box from '@mui/material/Box';
-import { Grid, ListItemButton, Stack } from '@mui/material';
+import { Grid, ListItemButton, Paper, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export default function SettingNav() {
@@ -18,7 +17,7 @@ export default function SettingNav() {
     <Grid container>
       <Grid item md={8}>
         <Stack spacing={3}>
-          <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          <Paper sx={{ borderRadius: 0 }}>
             <nav aria-label="main mailbox folders">
               <List sx={{ p: 0 }}>
                 <ListItem sx={{ bgcolor: '#eee' }}>
@@ -46,8 +45,8 @@ export default function SettingNav() {
                 </ListItem>
               </List>
             </nav>
-          </Box>
-          <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          </Paper>
+          <Paper sx={{ borderRadius: 0 }}>
             <nav aria-label="main mailbox folders">
               <List sx={{ p: 0 }}>
                 <ListItem sx={{ bgcolor: '#eee' }}>
@@ -65,7 +64,7 @@ export default function SettingNav() {
                 </ListItem>
               </List>
             </nav>
-          </Box>
+          </Paper>
         </Stack>
       </Grid>
     </Grid>

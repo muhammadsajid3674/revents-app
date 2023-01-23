@@ -10,10 +10,10 @@ const SelectInput = ({ input, width, type, placeholder, label, multiple, dataSou
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         value={input.value || undefined}
-        label={label}
         onChange={(e, data) => {
           input.onChange(data.props.value)
         }}
+        label={label}
         placeholder={placeholder}
         onBlur={input.onBlur}
       >
