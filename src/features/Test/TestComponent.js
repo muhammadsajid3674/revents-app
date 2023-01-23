@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux';
+import PlacesInput from '../../components/ReduxForm/PlacesAutocompleteInput';
 import { decrementCount, incrementCount } from './TestActionCreators';
+import PlacesAutocompleteInput from './TestPlacesAutocomplete';
 
 // Class Component
 class TestComponent extends Component {
@@ -11,6 +13,9 @@ class TestComponent extends Component {
         <button onClick={this.props.decrementCount}>-</button>
         <p>Initial State is: {this.props.state}</p>
         <button onClick={this.props.incrementCount}>+</button>
+
+        <PlacesAutocompleteInput />
+        {/* <PlacesInput /> */}
       </div>
     )
   }

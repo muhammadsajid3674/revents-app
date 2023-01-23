@@ -68,3 +68,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### Maps Integrations
+## Not Integrating in this application because its is paid and I don't have much money.
+
+Use react-places-autocomplete For Maps Javascript API Code is setup in test Section : [https://github.com/hibiken/react-places-autocomplete](https://github.com/hibiken/react-places-autocomplete)
+
