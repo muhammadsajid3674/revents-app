@@ -1,4 +1,4 @@
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack } from '@mui/material'
+import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography } from '@mui/material'
 import React from 'react'
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +22,7 @@ export const SignInMenu = (props) => {
     const navigate = useNavigate();
 
     return (
-        <div>
+        <div style={{ display: 'flex', alignItems:'center' }}>
             <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -84,6 +84,7 @@ export const SignInMenu = (props) => {
                     <ListItemText>Sign Out</ListItemText>
                 </MenuItem>
             </Menu>
+            <Typography>{props.currentUser}</Typography>
         </div>
     )
 }

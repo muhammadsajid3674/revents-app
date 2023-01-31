@@ -18,12 +18,14 @@ import { useNavigate } from 'react-router-dom';
 import { SignOutMenu } from '../../features/NavMenus/SignOutMenu';
 import { SignInMenu } from '../../features/NavMenus/SignInMenu';
 import { ThemeBtnSec } from '../button/ThemeBtn';
+import { connect } from 'react-redux';
+import { logout } from '../../features/auth/authActions';
 
 const drawerWidth = 240;
 function Navbar(props) {
 
     const navigate = useNavigate()
-    const { window } = props;
+    const { window, auth } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -73,14 +75,9 @@ function Navbar(props) {
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
-    const [auth, setAuth] = React.useState(false);
-
-    const handleSignInMenu = () => {
-        setAuth(true)
-    }
     const handleSignOutMenu = () => {
-        setAuth(false)
-        navigate('/')
+        props.logout()
+        // navigate('/')
     }
 
     return (
@@ -135,7 +132,7 @@ function Navbar(props) {
                                 label='Create Event'
                             />
                         </Box>
-                        {auth ? <SignInMenu signOut={handleSignOutMenu} /> : <SignOutMenu signIn={handleSignInMenu} />}
+                        {auth.authenticated ? <SignInMenu currentUser={auth.currentUser} signOut={handleSignOutMenu} /> : <SignOutMenu />}
                     </Toolbar>
                 </Container>
             </AppBar>
@@ -159,4 +156,13 @@ function Navbar(props) {
         </React.Fragment>
     );
 }
-export default Navbar;
+
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+const mapDispatchToProps = {
+    logout
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

@@ -5,17 +5,11 @@ import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 
 export const EventDetailedHeader = ({ event }) => {
 
-    // const bgImgUrl = `../../../assets/categoryImages/${event.category}.jpg`;
-
     const navigate = useNavigate()
 
     return (
         <Paper>
-            <Box className='eventDetailedHeader' sx={{
-                // backgroundImage: `url(${bgImgUrl})`,
-                // backgroundSize: 'cover',
-                // backgroundrepeat: 'no-repeat',
-            }}>
+            <Box className='eventDetailedHeader'>
                 <Stack sx={{ color: '#fff' }}>
                     <Typography variant='h3'>{event.title}</Typography>
                     <Typography variant='body1' sx={{ fontWeight: 600 }}>{event.date}</Typography>

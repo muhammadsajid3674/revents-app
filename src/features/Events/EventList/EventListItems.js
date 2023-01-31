@@ -58,7 +58,7 @@ export default function EventListItems(props) {
                         variant='contained'
                         label='View'
                     />
-                    <Button onClick={() => deleteEvent(event.id)} variant='contained' color='error'>delete</Button>
+                    <ThemeBtnPri onClick={() => deleteEvent(event.id)} variant='contained' color='error'  label='Delete'/>
                 </Stack>
             </Box>
             <Divider />
