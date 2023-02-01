@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import EventList from '../features/Events/EventList/EventList'
 import { createEvent, deleteEvent, updateEvent } from '../features/Events/EventActions';
+import BackdropLoader from '../components/loading/MuiBackdrop';
 
 class EventDashboard extends Component {
 
@@ -11,6 +12,7 @@ class EventDashboard extends Component {
   }
 
   render() {
+    if (this.props.isLoading) return <BackdropLoader />
     return (
       <Grid container spacing={2}>
         <Grid item md={7}>
@@ -26,7 +28,8 @@ class EventDashboard extends Component {
 
 const mapStateToProp = (state) => {
   return {
-    events: state.events
+    events: state.events,
+    isLoading: state.async.loading
   }
 }
 

@@ -1,3 +1,5 @@
+import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncActions"
+import { fetchSampleData } from "../data/mockApi"
 import { actionType } from "./EventConstants"
 
 export const createEvent = (event) => {
@@ -21,6 +23,20 @@ export const updateEvent = (event) => {
         type: actionType.UPDATE_EVENT,
         payload: {
             event
+        }
+    }
+}
+
+export const loadEvent = () => {
+    return async dispatch => {
+        try {
+            dispatch(asyncActionStart())
+            const events = await fetchSampleData()
+            dispatch({ type: actionType.FETCH_EVENTS, payload: { events } })
+            dispatch(asyncActionFinish())
+        } catch (error) {
+            console.log(error);
+            dispatch(asyncActionError())
         }
     }
 }

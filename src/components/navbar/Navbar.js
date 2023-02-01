@@ -118,19 +118,22 @@ function Navbar(props) {
                             REVENTS
                         </Typography>
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1, flexGrow: 1 }}>
+                            <Divider orientation="vertical" flexItem light={true} />
                             <Button sx={{ color: '#fff' }} onClick={() => { navigate('event') }}>Event</Button>
                             <Divider orientation="vertical" flexItem light={true} />
-                            <Button sx={{ color: '#fff' }} onClick={() => { navigate('people') }}>People</Button>
-                            <Divider orientation="vertical" flexItem />
-                            <Button sx={{ color: '#fff' }} onClick={() => { navigate('test') }}>Test</Button>
-                            <Divider orientation="vertical" flexItem />
-                            <ThemeBtnSec
-                                variant='contained'
-                                onClick={() => {
-                                    navigate('createEvent')
-                                }}
-                                label='Create Event'
-                            />
+                            {auth.authenticated && <>
+                                <Button sx={{ color: '#fff' }} onClick={() => { navigate('people') }}>People</Button>
+                                <Divider orientation="vertical" flexItem />
+                                <Button sx={{ color: '#fff' }} onClick={() => { navigate('test') }}>Test</Button>
+                                <Divider orientation="vertical" flexItem />
+                                <ThemeBtnSec
+                                    variant='contained'
+                                    onClick={() => {
+                                        navigate('createEvent')
+                                    }}
+                                    label='Create Event'
+                                />
+                            </>}
                         </Box>
                         {auth.authenticated ? <SignInMenu currentUser={auth.currentUser} signOut={handleSignOutMenu} /> : <SignOutMenu />}
                     </Toolbar>
