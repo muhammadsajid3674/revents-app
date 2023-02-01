@@ -7,14 +7,17 @@ import TextInput from '../../../components/ReduxForm/TextInput'
 const RegisterForm = () => {
     return (
         <Box>
-            <Typography variant='h4'>Register to REVENTS</Typography>
-            <Box component='form'>
+            <Box sx={{ padding: '10px 20px' }}>
+                <Typography variant='h5'>Register to REVENTS</Typography>
+            </Box>
+            <Box sx={{ borderBottom: '1px solid #bbb' }}></Box>
+            <Box component='form' sx={{ p: 3 }}>
                 <Field type='text' name='name' component={TextInput} placeholder='Email Address' />
                 <Field type='email' name='email' component={TextInput} placeholder='Email Address' />
                 <Field type='password' name='password' component={TextInput} placeholder='Password' />
-                <ThemeBtnPri label='Register'/>
+                <ThemeBtnPri label='Register' />
             </Box>
-        </Box>
+        </Box >
     )
 }
 

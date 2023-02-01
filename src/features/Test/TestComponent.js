@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { ThemeBtnPri } from '../../components/button/ThemeBtn';
-import { decrementCount, incrementCount } from './TestActionCreators';
+import { incrementAsync, decrementAsync } from './TestActionCreators';
 import { openModal } from '../Modals/ModalActions';
 import PlacesAutocompleteInput from './TestPlacesAutocomplete';
 
@@ -11,12 +11,14 @@ class TestComponent extends Component {
     return (
       <div>
         <h1>Test Component</h1>
-        <button onClick={this.props.decrementCount}>-</button>
-        <p>Initial State is: {this.props.state}</p>
-        <button onClick={this.props.incrementCount}>+</button>
+        <div style={{ display: 'block' }}>
+          <p>Initial State is: {this.props.state}</p>
+          <ThemeBtnPri isLoading={this.props.elementName === 'increment' && this.props.loading} onClick={() => this.props.incrementAsync('increment')} color="success" label="Increment" />
+          <ThemeBtnPri isLoading={this.props.elementName === 'decrement' && this.props.loading} onClick={() => this.props.decrementAsync('decrement')} color="error" label="Decrement" />
+        </div>
         <ThemeBtnPri label='Open Modal' onClick={() => {
-          this.props.openModal('TestModal', {data: 42})
-        }}/>
+          this.props.openModal('TestModal', { data: 42 })
+        }} />
 
         <PlacesAutocompleteInput />
         {/* <PlacesInput /> */}
@@ -26,12 +28,14 @@ class TestComponent extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  state: state.test.data
+  state: state.test.data,
+  loading: state.async.loading,
+  elementName: state.async.elementName
 }); // State Selector
 
 const mapDispatchToProps = {
-  incrementCount,
-  decrementCount,
+  incrementAsync,
+  decrementAsync,
   openModal
 } // Actions Dispatch
 
