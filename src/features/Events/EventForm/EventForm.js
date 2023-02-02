@@ -11,6 +11,7 @@ import TextArea from '../../../components/ReduxForm/TextArea'
 import SelectInput from '../../../components/ReduxForm/Select'
 import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired } from 'revalidate'
 import DateTimePickerField from '../../../components/ReduxForm/TimeDatePicker'
+import { openToastr } from '../../toastr/toastrActions';
 
 let btnTheme = createTheme({
     palette: {
@@ -56,6 +57,7 @@ class Kero extends Component {
     onFormSubmit = (values) => {
         if (this.props.initialValues) {
             this.props.updateEvent(values)
+            this.props.openToastr('Toastr', {severity: 'success', message: 'Event is Updated SuccessFully'})
             this.props.navigate(`/event/${this.props.initialValues.id}`)
         } else {
             const newEvent = {
@@ -65,6 +67,7 @@ class Kero extends Component {
                 hostedBy: 'Bob'
             }
             this.props.createEvent(newEvent)
+            this.props.openToastr('Toastr', {severity: 'success', message: 'Event is Created SuccessFully'})
             this.props.navigate(`/event/${newEvent.id}`)
         }
     }
@@ -139,6 +142,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProp = {
     createEvent,
     updateEvent,
+    openToastr
 }
 
 

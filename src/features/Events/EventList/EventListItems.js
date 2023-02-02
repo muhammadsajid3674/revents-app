@@ -31,7 +31,7 @@ export default function EventListItems(props) {
                 <Stack spacing={1} direction='row' alignItems='center'>
                     <Box style={{ display: 'flex', alignItems: 'center' }}>
                         <AccessTimeFilledIcon fontSize='small' />
-                        <Typography variant='body2'>Today, 1:00 PM</Typography>
+                        <Typography variant='body2'>{event.date}</Typography>
                     </Box>
                     <Divider orientation="vertical" flexItem />
                     <Box style={{ display: 'flex', alignItems: 'center' }}>

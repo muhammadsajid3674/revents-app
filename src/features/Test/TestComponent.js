@@ -3,6 +3,7 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { ThemeBtnPri } from '../../components/button/ThemeBtn';
 import { incrementAsync, decrementAsync } from './TestActionCreators';
 import { openModal } from '../Modals/ModalActions';
+import { openToastr } from '../toastr/toastrActions';
 import PlacesAutocompleteInput from './TestPlacesAutocomplete';
 
 // Class Component
@@ -18,6 +19,12 @@ class TestComponent extends Component {
         </div>
         <ThemeBtnPri label='Open Modal' onClick={() => {
           this.props.openModal('TestModal', { data: 42 })
+        }} />
+        <ThemeBtnPri label='Open toastr' onClick={() => {
+          this.props.openToastr('Toastr', { severity: 'success', message: 'Event is Created successfully' })
+        }} />
+        <ThemeBtnPri label='Open toastr Error' onClick={() => {
+          this.props.openToastr('Toastr', { severity: 'error', message: 'Event is not created Created successfully' })
         }} />
 
         <PlacesAutocompleteInput />
@@ -36,7 +43,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   incrementAsync,
   decrementAsync,
-  openModal
+  openModal,
+  openToastr
 } // Actions Dispatch
 
 export default connect(mapStateToProps, mapDispatchToProps)(TestComponent);
