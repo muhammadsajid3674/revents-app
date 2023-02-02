@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import EventList from '../features/Events/EventList/EventList'
 import { createEvent, deleteEvent, updateEvent } from '../features/Events/EventActions';
 import BackdropLoader from '../components/loading/MuiBackdrop';
+import EventActivity from '../features/Events/EventActivity/EventActivity';
 
 class EventDashboard extends Component {
 
@@ -19,7 +20,7 @@ class EventDashboard extends Component {
           <EventList events={this.props.events} deleteEvent={this.handleDeleteEvent} />
         </Grid>
         <Grid item md={5}>
-          <h2>Activity Feed</h2>
+          <EventActivity/>
         </Grid>
       </Grid>
     )
