@@ -3,7 +3,7 @@ import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
 import { applyMiddleware, createStore } from "redux"
 import { reduxFirestore, getFirestore } from "redux-firestore";
 import thunk from "redux-thunk";
-import app from "../../Firebase/FirebaseConfig";
+import firebase from "../../Firebase/FirebaseConfig";
 import rootReducer from "../Reducer/rootReducer";
 
 const rrfConfig = {
@@ -15,7 +15,7 @@ const rrfConfig = {
 const configureStore = () => {
     const middlewares = [thunk.withExtraArgument({ getFirebase, getFirestore })];
 
-    const composeEnhancer = composeWithDevTools(applyMiddleware(...middlewares), reactReduxFirebase(app, rrfConfig), reduxFirestore(app))
+    const composeEnhancer = composeWithDevTools(applyMiddleware(...middlewares), reactReduxFirebase(firebase, rrfConfig), reduxFirestore(firebase))
 
     const store = createStore(rootReducer, composeEnhancer)
 

@@ -1,3 +1,4 @@
+
 import { Grid } from '@mui/material'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -5,6 +6,7 @@ import EventList from '../features/Events/EventList/EventList'
 import { createEvent, deleteEvent, updateEvent } from '../features/Events/EventActions';
 import BackdropLoader from '../components/loading/MuiBackdrop';
 import EventActivity from '../features/Events/EventActivity/EventActivity';
+import { firestoreConnect } from 'react-redux-firebase';
 
 class EventDashboard extends Component {
 
@@ -20,7 +22,7 @@ class EventDashboard extends Component {
           <EventList events={this.props.events} deleteEvent={this.handleDeleteEvent} />
         </Grid>
         <Grid item md={5}>
-          <EventActivity/>
+          <EventActivity />
         </Grid>
       </Grid>
     )
@@ -40,4 +42,4 @@ const mapDispatchToProp = {
   updateEvent,
 }
 
-export default connect(mapStateToProp, mapDispatchToProp)(EventDashboard);
+export default connect(mapStateToProp, mapDispatchToProp)(firestoreConnect([{ collection: 'events' }])(EventDashboard));

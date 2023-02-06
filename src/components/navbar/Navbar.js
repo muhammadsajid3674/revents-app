@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { SignOutMenu } from '../../features/NavMenus/SignOutMenu';
+import SignOutMenu  from '../../features/NavMenus/SignOutMenu';
 import { SignInMenu } from '../../features/NavMenus/SignInMenu';
 import { ThemeBtnSec } from '../button/ThemeBtn';
 import { connect } from 'react-redux';
