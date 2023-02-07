@@ -7,6 +7,7 @@ import { createEvent, deleteEvent, updateEvent } from '../features/Events/EventA
 import BackdropLoader from '../components/loading/MuiBackdrop';
 import EventActivity from '../features/Events/EventActivity/EventActivity';
 import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
 
 class EventDashboard extends Component {
 
@@ -31,7 +32,7 @@ class EventDashboard extends Component {
 
 const mapStateToProp = (state) => {
   return {
-    events: state.events,
+    events: state.firestore.ordered.events,
     isLoading: state.async.loading
   }
 }
@@ -42,4 +43,5 @@ const mapDispatchToProp = {
   updateEvent,
 }
 
-export default connect(mapStateToProp, mapDispatchToProp)(firestoreConnect([{ collection: 'events' }])(EventDashboard));
+export default compose(firestoreConnect([{ collection: 'events' }]), connect(mapStateToProp, mapDispatchToProp))(EventDashboard);
+

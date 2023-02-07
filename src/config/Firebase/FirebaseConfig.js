@@ -1,17 +1,17 @@
-import * as firebase from "firebase/app";
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 import 'firebase/database';
 import 'firebase/storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAWsEbZgYePztqCpu5JyWPgbOhyyf4udyI",
-    authDomain: "revents-375612.firebaseapp.com",
-    projectId: "revents-375612",
-    storageBucket: "revents-375612.appspot.com",
-    messagingSenderId: "96556211047",
-    appId: "1:96556211047:web:30083b0a62eb563424adc2",
-    measurementId: "G-N12JQ0LVLR"
+    apiKey: "AIzaSyDK06WosBgEz2l983QCiWUkSwskaF5jpnA",
+    authDomain: "revents-d91d4.firebaseapp.com",
+    projectId: "revents-d91d4",
+    storageBucket: "revents-d91d4.appspot.com",
+    messagingSenderId: "832651898441",
+    appId: "1:832651898441:web:fde03caf57af7716ec5998",
+    measurementId: "G-X8B3KW3TM4"
 };
 
 firebase.initializeApp(firebaseConfig)
