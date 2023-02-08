@@ -6,7 +6,7 @@ export default class EventListAttendee extends Component {
         const {attendee} = this.props
         return (
             <Fragment>
-                <Avatar src={attendee.photoURL} sx={{ width: 50, height: 50 }} />
+                <Avatar src={attendee.photoUrl} sx={{ width: 50, height: 50 }} />
             </Fragment>
         )
     }

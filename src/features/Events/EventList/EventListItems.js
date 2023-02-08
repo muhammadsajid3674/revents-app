@@ -16,7 +16,7 @@ export default function EventListItems(props) {
                     <Grid item>
                         <Avatar
                             alt="Remy Sharp"
-                            src={event.hostPhotoURL}
+                            src={event.hostPhotoUrl}
                             sx={{ width: 56, height: 56 }}
                         />
                     </Grid>
@@ -31,19 +31,19 @@ export default function EventListItems(props) {
                 <Stack spacing={1} direction='row' alignItems='center'>
                     <Box style={{ display: 'flex', alignItems: 'center' }}>
                         <AccessTimeFilledIcon fontSize='small' />
-                        <Typography variant='body2'>{event.date}</Typography>
+                        {/* <Typography variant='body2'>{event.date}</Typography> */}
                     </Box>
                     <Divider orientation="vertical" flexItem />
                     <Box style={{ display: 'flex', alignItems: 'center' }}>
                         <NavigationIcon fontSize='small' />
-                        <Typography variant='body2'>{event.city}</Typography>
+                        <Typography variant='body2'>{event.venue}</Typography>
                     </Box>
                 </Stack>
             </Box>
             <Divider />
             <Box style={{ padding: '10px 15px', backgroundColor: '#eee' }}>
                 <Stack spacing={2} direction='row' alignItems='center'>
-                    {event.attendees && event.attendees.map((elem, index) => {
+                    {event.attendees && Object.values(event.attendees).map((elem, index) => {
                         return <EventListAttendee key={index} attendee={elem} />
                     })}
                 </Stack>
@@ -58,7 +58,7 @@ export default function EventListItems(props) {
                         variant='contained'
                         label='View'
                     />
-                    <ThemeBtnPri onClick={() => deleteEvent(event.id)} variant='contained' color='error'  label='Delete'/>
+                    <ThemeBtnPri onClick={() => deleteEvent(event.id)} variant='contained' color='error' label='Delete' />
                 </Stack>
             </Box>
             <Divider />

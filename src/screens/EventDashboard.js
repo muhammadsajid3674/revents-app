@@ -8,6 +8,7 @@ import BackdropLoader from '../components/loading/MuiBackdrop';
 import EventActivity from '../features/Events/EventActivity/EventActivity';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { sampleData } from '../features/data/sampleData';
 
 class EventDashboard extends Component {
 
@@ -33,6 +34,7 @@ class EventDashboard extends Component {
 const mapStateToProp = (state) => {
   return {
     events: state.firestore.ordered.events,
+    // events: sampleData,
     isLoading: state.async.loading
   }
 }
