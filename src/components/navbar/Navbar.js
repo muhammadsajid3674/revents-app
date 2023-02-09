@@ -15,17 +15,18 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import SignOutMenu  from '../../features/NavMenus/SignOutMenu';
+import SignOutMenu from '../../features/NavMenus/SignOutMenu';
 import { SignInMenu } from '../../features/NavMenus/SignInMenu';
 import { ThemeBtnSec } from '../button/ThemeBtn';
 import { connect } from 'react-redux';
-import { logout } from '../../features/auth/authActions';
+import { withFirebase } from 'react-redux-firebase';
 
 const drawerWidth = 240;
 function Navbar(props) {
 
     const navigate = useNavigate()
     const { window, auth } = props;
+    const authenticated = auth.isLoaded && !auth.isEmpty
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -76,8 +77,8 @@ function Navbar(props) {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     const handleSignOutMenu = () => {
-        props.logout()
-        // navigate('/')
+        props.firebase.logout()
+        navigate('/')
     }
 
     return (
@@ -121,7 +122,7 @@ function Navbar(props) {
                             <Divider orientation="vertical" flexItem light={true} />
                             <Button sx={{ color: '#fff' }} onClick={() => { navigate('event') }}>Event</Button>
                             <Divider orientation="vertical" flexItem light={true} />
-                            {auth.authenticated && <>
+                            {authenticated && <>
                                 <Button sx={{ color: '#fff' }} onClick={() => { navigate('people') }}>People</Button>
                                 <Divider orientation="vertical" flexItem />
                                 <Button sx={{ color: '#fff' }} onClick={() => { navigate('test') }}>Test</Button>
@@ -135,7 +136,7 @@ function Navbar(props) {
                                 />
                             </>}
                         </Box>
-                        {auth.authenticated ? <SignInMenu currentUser={auth.currentUser} signOut={handleSignOutMenu} /> : <SignOutMenu />}
+                        {authenticated ? <SignInMenu auth={auth} signOut={handleSignOutMenu} /> : <SignOutMenu />}
                     </Toolbar>
                 </Container>
             </AppBar>
@@ -161,11 +162,8 @@ function Navbar(props) {
 }
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    auth: state.firebase.auth
 });
 
-const mapDispatchToProps = {
-    logout
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default withFirebase(connect(mapStateToProps)(Navbar));

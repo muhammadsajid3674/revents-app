@@ -1,20 +1,57 @@
 import { closeModal } from "../Modals/ModalActions"
-import { actionTypes } from "./authConstants"
+import { SubmissionError } from 'redux-form';
 
 export const login = (credentials) => {
-    return async dispatch => {
-        dispatch({
-            type: actionTypes.LOGIN_USER,
-            payload: {
-                credentials
-            }
-        })
-        dispatch(closeModal())
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase()
+        try {
+            await firebase.auth().signInWithEmailAndPassword(credentials.email, credentials.password)
+            dispatch(closeModal())
+        } catch (error) {
+            console.log(error);
+            throw new SubmissionError({
+                _error: error.message.replace('Firebase: ', '').replace(/\(auth.*\)\.?/, '')
+            })
+        }
     }
 }
 
-export const logout = () => {
-    return {
-        type: actionTypes.SIGN_OUT_USER
+export const registerUser = user => {
+    return async (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        try {
+            let createUser = await firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
+            console.log(createUser);
+            await createUser.user.updateProfile({
+                displayName: user.displayName
+            })
+            let newUser = {
+                displayName: user.displayName,
+                createdAt: firestore.FieldValue.serverTimestamp()
+            };
+            await firestore.set(`user/${createUser.user.uid}`, { ...newUser })
+            dispatch(closeModal())
+        } catch (error) {
+            console.log(error);
+            throw new SubmissionError({
+                _error: error.message.replace('Firebase: ', '').replace(/\(auth.*\)\.?/, '')
+            })
+        }
     }
-};
+}
+
+export const socialLogin = (selectedProvider) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        try {
+            dispatch(closeModal());
+            await firebase.login({
+                provider: selectedProvider,
+                type: 'popup'
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}

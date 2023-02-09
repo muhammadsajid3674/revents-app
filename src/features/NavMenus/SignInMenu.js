@@ -84,7 +84,7 @@ export const SignInMenu = (props) => {
                     <ListItemText>Sign Out</ListItemText>
                 </MenuItem>
             </Menu>
-            <Typography>{props.currentUser}</Typography>
+            <Typography>{props.auth.email}</Typography>
         </div>
     )
 }

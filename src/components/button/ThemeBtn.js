@@ -3,7 +3,6 @@ import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import './themeBtn.css'
 import { CircularProgress } from '@mui/material';
-import { green } from '@mui/material/colors';
 
 const SecButton = styled(Button)(({ theme }) => ({
     backgroundColor: "transparent",
@@ -41,14 +40,22 @@ export function ThemeBtnPri(props) {
                 main: '#182848',
                 contrastText: '#fff',
             },
+            google: {
+                main: '#ea4335',
+                contrastText: '#fff',
+            },
+            facebook: {
+                main: '#4267b3',
+                contrastText: '#fff',
+            }
         },
     });
 
-    const { label, onClick, variant, className, disabled, color, isLoading } = props;
+    const { label, onClick, variant, className, disabled, color, isLoading , startIcon} = props;
 
     return (
         <ThemeProvider theme={theme}>
-            <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} onClick={onClick} className={className} style={{ fontWeight: 600, marginTop: '10px' }}>
+            <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} startIcon={startIcon} onClick={onClick} className={className} style={{ fontWeight: 600, marginTop: '10px' }}>
                 {isLoading && <CircularProgress  size={20} sx={{ position: 'absolute',color: '#182848' }} /> }{label}
             </Button>
         </ThemeProvider>
