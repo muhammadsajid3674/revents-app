@@ -1,6 +1,5 @@
-import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography } from '@mui/material'
+import { Avatar, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material'
 import React from 'react'
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import WorkIcon from '@mui/icons-material/Work';
@@ -22,7 +21,7 @@ export const SignInMenu = (props) => {
     const navigate = useNavigate();
 
     return (
-        <div style={{ display: 'flex', alignItems:'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
             <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -31,7 +30,7 @@ export const SignInMenu = (props) => {
                 onClick={handleMenu}
                 color="inherit"
             >
-                <AccountCircle />
+                <Avatar alt={props.auth.displayName} src={props.auth.photoURL || "../../assets/user.png"} />
             </IconButton>
             <Menu
                 id="menu-appbar"
@@ -84,7 +83,7 @@ export const SignInMenu = (props) => {
                     <ListItemText>Sign Out</ListItemText>
                 </MenuItem>
             </Menu>
-            <Typography>{props.auth.email}</Typography>
+            <Typography variant='p' sx={{ fontWeight: 600 }}>{props.auth.displayName}</Typography>
         </div>
     )
 }

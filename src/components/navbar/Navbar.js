@@ -128,6 +128,14 @@ function Navbar(props) {
                                 <Button sx={{ color: '#fff' }} onClick={() => { navigate('test') }}>Test</Button>
                                 <Divider orientation="vertical" flexItem />
                                 <ThemeBtnSec
+                                    style={{
+                                        backgroundColor: '#00a152 !important',
+                                        '&:hover': {
+                                            transition: "500ms all",
+                                            backgroundColor: "#fff !important",
+                                            color: '#000 !important',
+                                        },
+                                    }}
                                     variant='contained'
                                     onClick={() => {
                                         navigate('createEvent')

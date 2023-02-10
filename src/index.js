@@ -7,11 +7,17 @@ import ScrollToTop from './config/common/util/ScrollToTop';
 import './index.css';
 
 const store = configureStore();
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <Provider store={store}>
-    <ScrollToTop>
-      <App />
-    </ScrollToTop>
-  </Provider>
-);
+
+store.firebaseAuthIsReady.then(() => {
+
+  root.render(
+    <Provider store={store}>
+      <ScrollToTop>
+        <App />
+      </ScrollToTop>
+    </Provider>
+  );
+
+})

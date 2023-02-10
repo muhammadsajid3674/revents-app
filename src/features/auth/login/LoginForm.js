@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form'
 import { combineValidators, isRequired } from 'revalidate'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 import TextInput from '../../../components/ReduxForm/TextInput'
-import { login } from '../authActions';
+import { login, socialLogin } from '../authActions';
 import SocialLogin from '../SocialLogin/SocialLogin'
 
 const validate = combineValidators({
@@ -14,7 +14,7 @@ const validate = combineValidators({
     password: isRequired('password')
 });
 
-const LoginForm = ({ login, handleSubmit, error, invalid, submitting }) => {
+const LoginForm = ({ login, handleSubmit, error, invalid, submitting, socialLogin }) => {
     return (
         <Box>
             <Box sx={{ padding: '10px 20px' }}>
@@ -27,8 +27,8 @@ const LoginForm = ({ login, handleSubmit, error, invalid, submitting }) => {
                     <Field type='password' name='password' component={TextInput} placeholder='Password' />
                     {error && <Alert severity="error">{error}</Alert>}
                     <ThemeBtnPri disabled={invalid || submitting} label='Login' variant='contained' onClick={handleSubmit(login)} />
-                    <Divider sx={{marginTop: 1}}>OR</Divider>
-                    <SocialLogin />
+                    <Divider sx={{ marginTop: 1 }}>OR</Divider>
+                    <SocialLogin socialLogin={socialLogin} />
                 </Stack>
             </Box>
         </Box>
@@ -36,7 +36,8 @@ const LoginForm = ({ login, handleSubmit, error, invalid, submitting }) => {
 }
 
 const mapDispatchToProps = {
-    login
+    login,
+    socialLogin
 }
 
 export default connect(null, mapDispatchToProps)(reduxForm({ form: 'loginForm', validate })(LoginForm))

@@ -3,7 +3,7 @@ import { HomePage } from '../screens/HomePage'
 import EventDashboard from '../screens/EventDashboard';
 import { UserDetailedPage } from '../features/user/UserDetails/UserDetailedPage';
 import { PeopleDashboard } from '../screens/PeopleDashboard';
-import { SettingDashboard } from '../screens/SettingDashboard';
+import SettingDashboard from '../screens/SettingDashboard';
 import { Container, Toolbar } from '@mui/material';
 import Navbar from '../components/navbar/Navbar';
 import { Fragment } from 'react';

@@ -29,7 +29,7 @@ const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting, 
                     {error && <Alert severity="error">{error}</Alert>}
                     <ThemeBtnPri disabled={invalid || submitting} label='Register' onClick={handleSubmit(registerUser)} />
                     <Divider sx={{ marginTop: 1 }}>OR</Divider>
-                    <SocialLogin socialLogin={socialLogin}/>
+                    <SocialLogin socialLogin={socialLogin} />
                 </Stack>
             </Box>
         </Box >

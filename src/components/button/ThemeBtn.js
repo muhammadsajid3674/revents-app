@@ -17,46 +17,50 @@ const SecButton = styled(Button)(({ theme }) => ({
     },
 }));
 
+const theme = createTheme({
+    palette: {
+        themeOrange: {
+            main: '#e63946',
+            contrastText: '#fff',
+        },
+        themeGrey: {
+            main: '#eee',
+            contrastText: '#5f7d95',
+        },
+        themeDefault: {
+            main: '#182848',
+            contrastText: '#fff',
+        },
+        google: {
+            main: '#ea4335',
+            contrastText: '#fff',
+        },
+        facebook: {
+            main: '#4267b3',
+            contrastText: '#fff',
+        },
+        success: {
+            main: '#00a152',
+            contrastText: '#fff',
+        }
+    },
+});
 export function ThemeBtnSec(props) {
 
     const { label, onClick, variant, className, style } = props;
 
     return (
-        <SecButton variant={variant ?? 'outlined'} onClick={onClick} className={className} style={style}>{label}</SecButton>
+        <SecButton variant={variant ?? 'outlined'} onClick={onClick} className={className} sx={style}>{label}</SecButton>
     );
 }
 export function ThemeBtnPri(props) {
-    const theme = createTheme({
-        palette: {
-            themeOrange: {
-                main: '#e63946',
-                contrastText: '#fff',
-            },
-            themeGrey: {
-                main: '#eee',
-                contrastText: '#5f7d95',
-            },
-            themeDefault: {
-                main: '#182848',
-                contrastText: '#fff',
-            },
-            google: {
-                main: '#ea4335',
-                contrastText: '#fff',
-            },
-            facebook: {
-                main: '#4267b3',
-                contrastText: '#fff',
-            }
-        },
-    });
 
-    const { label, onClick, variant, className, disabled, color, isLoading , startIcon} = props;
+    const { label, onClick, variant, className, disabled, color, isLoading, startIcon } = props;
 
     return (
         <ThemeProvider theme={theme}>
             <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} startIcon={startIcon} onClick={onClick} className={className} style={{ fontWeight: 600, marginTop: '10px' }}>
-                {isLoading && <CircularProgress  size={20} sx={{ position: 'absolute',color: '#182848' }} /> }{label}
+                {isLoading && <CircularProgress size={20} sx={{ position: 'absolute', color: '#182848' }} />}{label}
             </Button>
         </ThemeProvider>
     );
