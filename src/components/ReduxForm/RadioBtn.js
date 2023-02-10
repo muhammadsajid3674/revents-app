@@ -1,8 +1,8 @@
 import { FormControlLabel, Radio, } from '@mui/material'
 
-export function MuiRadio({ label, value, input }) {
+export function MuiRadio({ label, input, name }) {
 
     return (
-        <FormControlLabel {...input} value={value} control={<Radio />} label={label} />
+        <FormControlLabel {...input} control={<Radio />} label={label} />
     )
 }

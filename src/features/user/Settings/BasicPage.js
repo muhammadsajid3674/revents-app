@@ -17,15 +17,15 @@ const BasicPage = ({ submitting, pristine }) => {
             <Grid item md={6}>
               <Field type='text' name='displayName' component={TextInput} placeholder='Known As' />
               <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                <FormLabel id="gender">Gender</FormLabel>
                 <RadioGroup
                   row
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="male"
-                  name="radio-buttons-group"
+                  aria-labelledby="gender"
+                  defaultValue='male'
+                  name="gender"
                 >
-                  <Field type='radio' name='male' value='male' component={MuiRadio} label='Male' />
-                  <Field type='radio' name='female' value='female' component={MuiRadio} label='Female' />
+                  <Field type='radio' name='gender' value='male' component={MuiRadio} label='Male' />
+                  <Field type='radio' name='gender' value='female' component={MuiRadio} label='Female' />
                 </RadioGroup>
               </FormControl>
               <Field type='date' name='dateOfBirth' component={DatePickerField} placeholder='Date of birth' />
