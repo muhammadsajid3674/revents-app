@@ -19,6 +19,8 @@ export default function DatePickerField({ input, width, type, label, multiple, d
                     setValue(value)
                 }}
                 renderInput={(params) => <TextField {...params}
+                    margin='dense'
+                    fullWidth
                     value={input.value || null}
                     // onChange={(e, data) => input.onChange(data.value)}
                     onBlur={input.onBlur}
