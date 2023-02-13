@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Box, Button, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import EventListAttendee from './EventListAttendee'

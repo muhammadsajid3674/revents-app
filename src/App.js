@@ -9,8 +9,8 @@ const App = () => {
   return (
     <Box sx={{ backgroundColor: 'rgba(0,0,0,0.15)', minHeight: '100vh' }}>
       <AppRouter />
-      <ModalManager />
       <ToastrManager />
+      <ModalManager />
     </Box>
   )
 }

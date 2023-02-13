@@ -26,4 +26,4 @@ const mapStateToProps = (state) => ({
     currentToaster: state.toastr
 });
 
-export default connect(mapStateToProps)(ToastrManager)
+export default connect(mapStateToProps)(ToastrManager);

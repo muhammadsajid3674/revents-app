@@ -30,7 +30,7 @@ export const registerUser = user => {
                 displayName: user.displayName,
                 createdAt: firestore.FieldValue.serverTimestamp()
             };
-            await firestore.set(`user/${createUser.user.uid}`, { ...newUser })
+            await firestore.set(`users/${createUser.user.uid}`, { ...newUser })
             dispatch(closeModal())
         } catch (error) {
             console.log(error);
@@ -57,7 +57,7 @@ export const socialLogin = (selectedProvider) => {
                     photoURL: socialUser.user.photoURL,
                     createdAt: firestore.FieldValue.serverTimestamp()
                 }
-                await firestore.set(`user/${socialUser.user.uid}`, { ...newUser })
+                await firestore.set(`users/${socialUser.user.uid}`, { ...newUser })
             }
         } catch (error) {
             console.log(error);

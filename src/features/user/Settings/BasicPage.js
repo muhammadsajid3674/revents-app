@@ -6,7 +6,7 @@ import DatePickerField from '../../../components/ReduxForm/DatepickerField'
 import { MuiRadio } from '../../../components/ReduxForm/RadioBtn'
 import TextInput from '../../../components/ReduxForm/TextInput'
 
-const BasicPage = ({ submitting, pristine }) => {
+const BasicPage = ({ submitting, pristine, updateProfile, handleSubmit }) => {
   return (
     <Paper>
       <Box style={{ padding: '10px 15px' }}>
@@ -18,12 +18,7 @@ const BasicPage = ({ submitting, pristine }) => {
               <Field type='text' name='displayName' component={TextInput} placeholder='Known As' />
               <FormControl>
                 <FormLabel id="gender">Gender</FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="gender"
-                  defaultValue='male'
-                  name="gender"
-                >
+                <RadioGroup row aria-labelledby="gender" defaultValue='male' name="gender">
                   <Field type='radio' name='gender' value='male' component={MuiRadio} label='Male' />
                   <Field type='radio' name='gender' value='female' component={MuiRadio} label='Female' />
                 </RadioGroup>
@@ -33,11 +28,11 @@ const BasicPage = ({ submitting, pristine }) => {
             </Grid>
           </Grid>
           <Divider sx={{ marginTop: '10px' }} />
-          <ThemeBtnPri disabled={pristine || submitting} color='success' label='Update Profile' variant='contained' />
+          <ThemeBtnPri disabled={pristine || submitting} color='success' label='Update Profile' variant='contained' onClick={handleSubmit(updateProfile)} />
         </Box>
       </Box>
     </Paper>
   )
 }
 
-export default reduxForm({ form: 'userProfile', enableReinitialize: true })(BasicPage);
+export default reduxForm({ form: 'userProfile', enableReinitialize: true, destroyOnUnmount: false })(BasicPage);

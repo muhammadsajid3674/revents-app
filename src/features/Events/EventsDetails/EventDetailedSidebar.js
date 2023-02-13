@@ -1,6 +1,5 @@
 import { Box, Chip, createTheme, Grid, Paper, ThemeProvider, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import chatUser from '../../../assets/user.png';
 
 const theme = createTheme({
   palette: {

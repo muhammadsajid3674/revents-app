@@ -7,7 +7,7 @@ import firebase from "../../Firebase/FirebaseConfig";
 import rootReducer from "../Reducer/rootReducer";
 
 const rrfConfig = {
-    userProfiles: 'user',
+    userProfile: 'users',
     attachAuthIsReady: true,
     useFirestoreForProfile: true,
     updateProfileOnLogin: false

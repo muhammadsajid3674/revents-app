@@ -67,7 +67,7 @@ export function ThemeBtnPri(props) {
 }
 export function ThemeBtnHome(props) {
 
-    const { label, onClick, className } = props;
+    const { label, onClick } = props;
 
     return (
         <button className="learn-more" onClick={onClick}>
