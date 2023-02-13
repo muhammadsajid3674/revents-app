@@ -5,10 +5,10 @@ import { Route, Routes } from 'react-router-dom'
 import AboutPage from '../features/user/Settings/AboutPage'
 import AccountPage from '../features/user/Settings/AccountPage'
 import BasicPage from '../features/user/Settings/BasicPage'
-import { PhotoPage } from '../features/user/Settings/PhotosPage'
 import SettingNav from '../features/user/Settings/SettingNav'
 import { changePassword } from '../features/auth/authActions';
 import { updateProfile } from '../features/user/userAction';
+import PhotosPage from '../features/user/Settings/Photos/PhotosPage'
 
 const SettingDashboard = ({ changePassword, providerId, user, updateProfile }) => {
   return (
@@ -17,7 +17,7 @@ const SettingDashboard = ({ changePassword, providerId, user, updateProfile }) =
         <Routes>
           <Route path='' element={<BasicPage initialValues={user} updateProfile={updateProfile} />} />
           <Route path='about' element={<AboutPage initialValues={user} updateProfile={updateProfile} />} />
-          <Route path='photo' element={<PhotoPage />} />
+          <Route path='photo' element={<PhotosPage />} />
           <Route path='account' element={<AccountPage changePassword={changePassword} providerId={providerId} />} />
         </Routes>
       </Grid>
