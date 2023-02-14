@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { ThemeBtnPri } from '../../components/button/ThemeBtn';
 import { incrementAsync, decrementAsync } from './TestActionCreators';
 import { openModal } from '../Modals/ModalActions';
 import { openToastr } from '../toastr/toastrActions';
-import PlacesAutocompleteInput from './TestPlacesAutocomplete';
 
 // Class Component
 class TestComponent extends Component {
@@ -26,8 +25,6 @@ class TestComponent extends Component {
         <ThemeBtnPri label='Open toastr Error' onClick={() => {
           this.props.openToastr('Toastr', { severity: 'error', message: 'Event is not created Created successfully' })
         }} />
-
-        <PlacesAutocompleteInput />
         {/* <PlacesInput /> */}
       </div>
     )
