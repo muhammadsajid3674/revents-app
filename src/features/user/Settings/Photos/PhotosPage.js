@@ -1,14 +1,17 @@
-import { Box, Button, ButtonGroup, Card, CardActions, CardContent, CardMedia, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
+import { Box, Button, ButtonGroup, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DropzoneInput from './DropzoneInput';
 import CropperInput from './CropperInput';
 import { connect } from 'react-redux';
 import { uploadProfileImage } from '../../userAction';
 import { openToastr } from '../../../toastr/toastrActions';
 import DoneIcon from '@mui/icons-material/Done';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import UserPhotos from './UserPhotos';
 
-const PhotosPage = ({ uploadProfileImage }) => {
+const PhotosPage = ({ uploadProfileImage, photos, profile, openToastr }) => {
 
   const [files, setFiles] = useState([])
   const [image, setImage] = useState(null)
@@ -22,13 +25,13 @@ const PhotosPage = ({ uploadProfileImage }) => {
       console.log(error);
       openToastr('Toastr', { message: 'Something went wrong', severity: 'error' })
     }
-
   }
 
   const handleCancelUploading = () => {
     setFiles([]);
     setImage(null);
   }
+
   useEffect(() => {
     return () => {
       files.forEach(file => URL.revokeObjectURL(file.preview))
@@ -53,44 +56,46 @@ const PhotosPage = ({ uploadProfileImage }) => {
             {files.length > 0 && (<>
               <div className='img-preview' style={{ minWidth: 200, minHeight: 200, overflow: 'hidden' }} />
               <ButtonGroup variant="standard" aria-label="Disabled elevation outlined primary button group" sx={{ display: 'flex', justifyContent: 'space-between', width: 200 }}>
-              <Button onClick={handleUploadingPhoto}><DoneIcon color='success'/></Button>
-              <Button onClick={handleCancelUploading}><DeleteIcon color='error'/></Button>
+                <Button onClick={handleUploadingPhoto}><DoneIcon color='success' /></Button>
+                <Button onClick={handleCancelUploading}><DeleteIcon color='error' /></Button>
               </ButtonGroup>
             </>
             )}
           </Grid>
         </Grid>
         <Divider sx={{ margin: '10px 0 10px 0' }} />
-        <Stack direction='row' spacing={3}>
-          <Card sx={{ maxWidth: 180 }}>
-            <CardMedia
-              component="img"
-              height="180"
-              image="https://randomuser.me/api/portraits/men/7.jpg"
-            />
-            <CardActions sx={{ backgroundColor: '#00a152', justifyContent: 'center', }} >
-              <Typography variant='body1' sx={{ color: '#fff', fontWeight: 600, padding: '4px 0' }}>Main Photo</Typography>
-            </CardActions>
-          </Card>
-          <Card sx={{ maxWidth: 180 }}>
-            <CardMedia
-              component="img"
-              height="180"
-              image="https://randomuser.me/api/portraits/men/7.jpg"
-            />
-            <CardActions sx={{ justifyContent: 'space-between' }} >
-              <Button size="small" color='success' sx={{ fontWeight: 600 }}>Main</Button>
-              <Button size="small" color='error'><DeleteIcon /></Button>
-            </CardActions>
-          </Card>
-        </Stack>
+        <UserPhotos photos={photos} profile={profile} />
       </Box>
     </Paper>
   )
 }
 
-const mapDispatchToProps = {
-  uploadProfileImage
+
+const query = ({ auth }) => {
+  return [
+    {
+      collection: 'users',
+      doc: auth.uid,
+      subcollections: [
+        { collection: 'photos' }
+      ],
+      storeAs: 'photos'
+    }
+  ]
 }
 
-export default connect(null, mapDispatchToProps)(PhotosPage);
+const mapStateToProps = (state) => ({
+  auth: state.firebase.auth,
+  profile: state.firebase.profile,
+  photos: state.firestore.ordered.photos
+});
+
+const mapDispatchToProps = {
+  uploadProfileImage,
+  openToastr
+}
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  firestoreConnect(auth => query(auth))
+)(PhotosPage);
