@@ -3,6 +3,7 @@ import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import './themeBtn.css'
 import { CircularProgress } from '@mui/material';
+import { themePalette } from '../../config/common/Theme/ThemePalette';
 
 const SecButton = styled(Button)(({ theme }) => ({
     backgroundColor: "transparent",
@@ -17,34 +18,6 @@ const SecButton = styled(Button)(({ theme }) => ({
     },
 }));
 
-const theme = createTheme({
-    palette: {
-        themeOrange: {
-            main: '#e63946',
-            contrastText: '#fff',
-        },
-        themeGrey: {
-            main: '#eee',
-            contrastText: '#5f7d95',
-        },
-        themeDefault: {
-            main: '#182848',
-            contrastText: '#fff',
-        },
-        google: {
-            main: '#ea4335',
-            contrastText: '#fff',
-        },
-        facebook: {
-            main: '#4267b3',
-            contrastText: '#fff',
-        },
-        success: {
-            main: '#00a152',
-            contrastText: '#fff',
-        }
-    },
-});
 export function ThemeBtnSec(props) {
 
     const { label, onClick, variant, className, style } = props;
@@ -58,7 +31,7 @@ export function ThemeBtnPri(props) {
     const { label, onClick, variant, className, disabled, color, isLoading, startIcon } = props;
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themePalette}>
             <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} startIcon={startIcon} onClick={onClick} className={className} style={{ fontWeight: 600 }}>
                 {isLoading ? <CircularProgress size={24} sx={{ color: '#182848' }} /> : label}
             </Button>

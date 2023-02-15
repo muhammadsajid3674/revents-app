@@ -65,7 +65,7 @@ export const SignInMenu = (props) => {
                     </ListItemIcon>
                     <ListItemText>My Network</ListItemText>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => { navigate(`profile/${props.uid}`); setAnchorEl(null); }}>
                     <ListItemIcon>
                         <PersonIcon />
                     </ListItemIcon>

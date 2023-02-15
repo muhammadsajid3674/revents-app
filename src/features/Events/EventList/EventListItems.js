@@ -11,7 +11,7 @@ export default function EventListItems(props) {
     const { event, deleteEvent } = props;
     return (
         <Paper>
-            <Box style={{ padding: '10px 15px' }}>
+            <Box sx={{ padding: '10px 15px' }}>
                 <Grid container alignItems='center' spacing={2}>
                     <Grid item>
                         <Avatar

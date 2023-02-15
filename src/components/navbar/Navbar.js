@@ -144,7 +144,7 @@ function Navbar(props) {
                                 />
                             </>}
                         </Box>
-                        {authenticated ? <SignInMenu auth={profile} signOut={handleSignOutMenu} /> : <SignOutMenu />}
+                        {authenticated ? <SignInMenu uid={auth.uid} auth={profile} signOut={handleSignOutMenu} /> : <SignOutMenu />}
                     </Toolbar>
                 </Container>
             </AppBar>
