@@ -4,21 +4,22 @@ import React, { useEffect, useState } from 'react'
 import DropzoneInput from './DropzoneInput';
 import CropperInput from './CropperInput';
 import { connect } from 'react-redux';
-import { uploadProfileImage } from '../../userAction';
+import { uploadProfileImage, deleteImage, setMainProfile } from '../../userAction';
 import { openToastr } from '../../../toastr/toastrActions';
 import DoneIcon from '@mui/icons-material/Done';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import UserPhotos from './UserPhotos';
+import { ThemeBtnPri } from '../../../../components/button/ThemeBtn';
 
-const PhotosPage = ({ uploadProfileImage, photos, profile, openToastr }) => {
+const PhotosPage = ({ uploadProfileImage, deleteImage, setMainProfile, photos, profile, openToastr, loading }) => {
 
   const [files, setFiles] = useState([])
   const [image, setImage] = useState(null)
 
   const handleUploadingPhoto = async () => {
     try {
-      await uploadProfileImage(image, files[0].name);
+      await uploadProfileImage(image);
       handleCancelUploading()
       openToastr('Toastr', { message: 'Image uploaded successfully', severity: 'success' })
     } catch (error) {
@@ -30,6 +31,25 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, openToastr }) => {
   const handleCancelUploading = () => {
     setFiles([]);
     setImage(null);
+  }
+
+  const handleDeleteImage = async (image) => {
+    try {
+      await deleteImage(image);
+      openToastr('Toastr', { message: 'Image deleted successfully', severity: 'success' })
+    } catch (error) {
+      console.log(error);
+      openToastr('Toastr', { message: 'Something went wrong', severity: 'error' })
+    }
+  }
+
+  const handleSetMainProfile = async (image) => {
+    try {
+      await setMainProfile(image)
+    } catch (error) {
+      console.log(error);
+      openToastr('Toastr', { message: 'Something went wrong', severity: 'error' })
+    }
   }
 
   useEffect(() => {
@@ -56,7 +76,7 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, openToastr }) => {
             {files.length > 0 && (<>
               <div className='img-preview' style={{ minWidth: 200, minHeight: 200, overflow: 'hidden' }} />
               <ButtonGroup variant="standard" aria-label="Disabled elevation outlined primary button group" sx={{ display: 'flex', justifyContent: 'space-between', width: 200 }}>
-                <Button onClick={handleUploadingPhoto}><DoneIcon color='success' /></Button>
+                <ThemeBtnPri onClick={handleUploadingPhoto} variant='standard' isLoading={loading} label={<DoneIcon color='success' />} />
                 <Button onClick={handleCancelUploading}><DeleteIcon color='error' /></Button>
               </ButtonGroup>
             </>
@@ -64,7 +84,7 @@ const PhotosPage = ({ uploadProfileImage, photos, profile, openToastr }) => {
           </Grid>
         </Grid>
         <Divider sx={{ margin: '10px 0 10px 0' }} />
-        <UserPhotos photos={photos} profile={profile} />
+        <UserPhotos photo={photos} profile={profile} deleteImage={handleDeleteImage} setMainProfile={handleSetMainProfile} />
       </Box>
     </Paper>
   )
@@ -87,12 +107,15 @@ const query = ({ auth }) => {
 const mapStateToProps = (state) => ({
   auth: state.firebase.auth,
   profile: state.firebase.profile,
-  photos: state.firestore.ordered.photos
+  photos: state.firestore.ordered.photos,
+  loading: state.async.loading
 });
 
 const mapDispatchToProps = {
   uploadProfileImage,
-  openToastr
+  openToastr,
+  deleteImage,
+  setMainProfile
 }
 
 export default compose(

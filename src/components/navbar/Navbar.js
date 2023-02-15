@@ -25,7 +25,7 @@ const drawerWidth = 240;
 function Navbar(props) {
 
     const navigate = useNavigate()
-    const { window, auth } = props;
+    const { window, auth, profile } = props;
     const authenticated = auth.isLoaded && !auth.isEmpty
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -144,7 +144,7 @@ function Navbar(props) {
                                 />
                             </>}
                         </Box>
-                        {authenticated ? <SignInMenu auth={auth} signOut={handleSignOutMenu} /> : <SignOutMenu />}
+                        {authenticated ? <SignInMenu auth={profile} signOut={handleSignOutMenu} /> : <SignOutMenu />}
                     </Toolbar>
                 </Container>
             </AppBar>
@@ -170,7 +170,8 @@ function Navbar(props) {
 }
 
 const mapStateToProps = (state) => ({
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    profile: state.firebase.profile
 });
 
 

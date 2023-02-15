@@ -1,5 +1,7 @@
 import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncActions";
 import { openToastr } from "../toastr/toastrActions";
+import cuid from 'cuid'
+import { Photo } from "@mui/icons-material";
 
 export const updateProfile = (user) => {
     return async (dispatch, getState, { getFirebase }) => {
@@ -14,14 +16,15 @@ export const updateProfile = (user) => {
     }
 }
 
-export const uploadProfileImage = (file, fileName) => {
+export const uploadProfileImage = (file) => {
     return async (dispatch, getState, { getFirebase, getFirestore }) => {
+        const imageName = cuid();
         const firebase = getFirebase();
         const firestore = getFirestore();
         const user = firebase.auth().currentUser;
         const path = `${user.uid}/user_images`;
         const options = {
-            name: fileName
+            name: imageName
         }
         try {
             dispatch(asyncActionStart())
@@ -48,13 +51,49 @@ export const uploadProfileImage = (file, fileName) => {
                     collection: 'photos'
                 }]
             }, {
-                name: fileName,
+                name: imageName,
                 url: downloadURL
             })
             dispatch(asyncActionFinish())
         } catch (error) {
             console.log(error);
             dispatch(asyncActionError())
+        }
+    }
+}
+
+export const deleteImage = (image) => {
+    return async (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const user = firebase.auth().currentUser;
+        try {
+            await firebase.deleteFile(`${user.uid}/user_images/${image.name}`)
+            await firestore.delete({
+                collection: 'users',
+                doc: user.uid,
+                subcollections: [{
+                    collection: 'photos',
+                    doc: image.id
+                }]
+            })
+        } catch (error) {
+            console.log(error);
+            throw new Error('Problem while deleting the photo')
+        }
+    }
+}
+
+export const setMainProfile = (image) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        try {
+            await firebase.updateProfile({
+                photoURL: image.url
+            })
+        } catch (error) {
+            console.log(error);
+            throw new Error('Problem while setting main profile')
         }
     }
 }

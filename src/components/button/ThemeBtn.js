@@ -59,8 +59,8 @@ export function ThemeBtnPri(props) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} startIcon={startIcon} onClick={onClick} className={className} style={{ fontWeight: 600, marginTop: '10px' }}>
-                {isLoading && <CircularProgress size={20} sx={{ position: 'absolute', color: '#182848' }} />}{label}
+            <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} startIcon={startIcon} onClick={onClick} className={className} style={{ fontWeight: 600 }}>
+                {isLoading ? <CircularProgress size={24} sx={{ color: '#182848' }} /> : label}
             </Button>
         </ThemeProvider>
     );
