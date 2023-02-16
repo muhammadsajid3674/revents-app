@@ -1,12 +1,27 @@
+import { createNewEvent } from "../../config/common/HelperMethods/createNewEvent"
 import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncActions"
 import { fetchSampleData } from "../data/mockApi"
+import { openToastr } from "../toastr/toastrActions"
 import { actionType } from "./EventConstants"
 
 export const createEvent = (event) => {
-    return {
-        type: actionType.CREATE_EVENT,
-        payload: {
-            event
+    return async (dispatch, getState, { getFirestore }) => {
+        const firestore = getFirestore();
+        const user = firestore.auth().currentUser
+        const photoURL = getState().firebase.profile.photoURL
+        const newEvent = createNewEvent(user, photoURL, event)
+        try {
+            let createdEvent = await firestore.add('events', newEvent)
+            await firestore.set(`event_attendees/${createdEvent.id}_${user.uid}`, {
+                eventId: createdEvent.id,
+                userUid: user.uid,
+                eventDate: event.date,
+                host: true
+            })
+            dispatch(openToastr('Toastr', { message: "Event is created successfully.", severity: "success" }))
+            return createdEvent;
+        } catch (error) {
+            dispatch(openToastr('Toastr', { message: "Something went wrong.", severity: "error" }))
         }
     }
 }

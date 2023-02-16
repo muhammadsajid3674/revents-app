@@ -54,21 +54,20 @@ class Kero extends Component {
     //     }
     // } // to render the selected Event values
 
-    onFormSubmit = (values) => {
-        if (this.props.initialValues) {
-            this.props.updateEvent(values)
-            this.props.openToastr('Toastr', {severity: 'success', message: 'Event is Updated SuccessFully'})
-            this.props.navigate(`/event/${this.props.initialValues.id}`)
-        } else {
-            const newEvent = {
-                ...values,
-                id: cuid(),
-                hostImg: '../../../assets/user.png',
-                hostedBy: 'Bob'
+    onFormSubmit = async (values) => {
+        try {
+            if (this.props.initialValues.id) {
+                this.props.updateEvent(values)
+                this.props.openToastr('Toastr', { severity: 'success', message: 'Event is Updated SuccessFully' })
+                this.props.navigate(`/event/${this.props.initialValues.id}`)
+            } else {
+                let createdEvent = await this.props.createEvent(values)
+                this.props.openToastr('Toastr', { severity: 'success', message: 'Event is Created SuccessFully' })
+                this.props.navigate(`/event/${createdEvent.id}`)
             }
-            this.props.createEvent(newEvent)
-            this.props.openToastr('Toastr', {severity: 'success', message: 'Event is Created SuccessFully'})
-            this.props.navigate(`/event/${newEvent.id}`)
+        } catch (error) {
+            console.log(error);
+            this.props.openToastr('Toastr', { severity: 'error', message: 'Something went wrong' })
         }
     }
 

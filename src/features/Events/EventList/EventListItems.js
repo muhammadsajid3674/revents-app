@@ -5,10 +5,21 @@ import NavigationIcon from '@mui/icons-material/Navigation';
 import EventListAttendee from './EventListAttendee'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment/moment';
 
 export default function EventListItems(props) {
     const navigate = useNavigate()
+
     const { event, deleteEvent } = props;
+
+    let eventDate, eventTime, eventDay;
+    if (event.date) {
+        let formatDate = event.date.toDate();
+        eventDate = moment(formatDate).format('DD MMM YYYY');
+        eventTime = moment(formatDate).format('hh:mm a');
+        eventDay = moment(formatDate).format('dddd');
+    }
+
     return (
         <Paper>
             <Box sx={{ padding: '10px 15px' }}>
@@ -16,7 +27,7 @@ export default function EventListItems(props) {
                     <Grid item>
                         <Avatar
                             alt="Remy Sharp"
-                            src={event.hostPhotoUrl}
+                            src={event.hostPhotoURL}
                             sx={{ width: 56, height: 56 }}
                         />
                     </Grid>
@@ -31,7 +42,7 @@ export default function EventListItems(props) {
                 <Stack spacing={1} direction='row' alignItems='center'>
                     <Box style={{ display: 'flex', alignItems: 'center' }}>
                         <AccessTimeFilledIcon fontSize='small' />
-                        {/* <Typography variant='body2'>{event.date}</Typography> */}
+                        <Typography variant='body2'>{eventDay} {eventDate} at {eventTime}</Typography>
                     </Box>
                     <Divider orientation="vertical" flexItem />
                     <Box style={{ display: 'flex', alignItems: 'center' }}>
@@ -53,7 +64,6 @@ export default function EventListItems(props) {
                 <Stack spacing={1} direction='row' alignItems='center'>
                     <Typography variant='body2' style={{ flexGrow: 1 }}>{event.description}</Typography>
                     <ThemeBtnPri
-                        // onClick={() => selectEvent(event)}
                         onClick={() => { navigate(`${event.id}`) }}
                         variant='contained'
                         label='View'
