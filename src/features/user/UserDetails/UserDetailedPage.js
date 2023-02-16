@@ -8,8 +8,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DescriptionIcon from '@mui/icons-material/Description';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import EventIcon from '@mui/icons-material/Event';
+import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { firestoreConnect } from 'react-redux-firebase';
 
-export const UserDetailedPage = () => {
+const UserDetailedPage = ({ profile, photos, auth }) => {
+
+  const navigate = useNavigate()
   return (
     <Grid container spacing={3}>
       <Grid item md={6}>
@@ -19,14 +25,14 @@ export const UserDetailedPage = () => {
               <AccountCircleIcon fontSize='large' />
               <Typography variant='h5'>Profile</Typography>
             </Stack>
-            <UserProfile />
+            <UserProfile navigate={navigate} profile={profile} auth={auth} />
           </Paper>
           <Paper sx={{ padding: '10px 15px' }}>
             <Stack direction='row' alignItems='center' spacing={1} sx={{ marginBottom: '0.5rem' }}>
               <DescriptionIcon fontSize='large' />
-              <Typography variant='h5'>About Sajid</Typography>
+              <Typography variant='h5'>About {profile.displayName}</Typography>
             </Stack>
-            <UserDescription />
+            <UserDescription profile={profile} />
           </Paper>
         </Stack>
       </Grid>
@@ -37,7 +43,7 @@ export const UserDetailedPage = () => {
               <InsertPhotoIcon fontSize='large' />
               <Typography variant='h5'>Photos</Typography>
             </Stack>
-            <UserPhotos />
+            <UserPhotos photos={photos} />
           </Paper>
           <Paper sx={{ padding: '10px 15px' }}>
             <Stack direction='row' alignItems='center' spacing={1} sx={{ marginBottom: '0.5rem' }}>
@@ -51,3 +57,28 @@ export const UserDetailedPage = () => {
     </Grid>
   )
 }
+
+const query = ({ auth }) => {
+  return [
+    {
+      collection: 'users',
+      doc: auth.uid,
+      subcollections: [
+        { collection: 'photos' }
+      ],
+      storeAs: 'photos'
+    }
+  ]
+}
+
+const mapStateToProps = (state) => ({
+  profile: state.firebase.profile,
+  auth: state.firebase.auth,
+  photos: state.firestore.ordered.photos
+})
+
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect(auth => query(auth))
+)
+  (UserDetailedPage);
