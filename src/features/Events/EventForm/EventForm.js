@@ -1,5 +1,4 @@
 import { Box, Button, createTheme, Grid, Paper, Stack, ThemeProvider, Typography } from '@mui/material'
-import cuid from 'cuid'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
@@ -12,6 +11,7 @@ import SelectInput from '../../../components/ReduxForm/Select'
 import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired } from 'revalidate'
 import DateTimePickerField from '../../../components/ReduxForm/TimeDatePicker'
 import { openToastr } from '../../toastr/toastrActions';
+import { withFirestore } from 'react-redux-firebase';
 
 let btnTheme = createTheme({
     palette: {
@@ -46,36 +46,32 @@ const category = [
 
 class Kero extends Component {
 
-    // componentDidMount() {
-    //     if (this.props.selectedEvent !== null) {
-    //         this.setState({
-    //             ...this.props.selectedEvent
-    //         })
-    //     }
-    // } // to render the selected Event values
+    async componentDidMount() {
+        const { firestore, navigate, params } = this.props;
+        let event = await firestore.get(`events/${params.id}`)
+        if (!event.exists) {
+            navigate('*')
+        }
+    } // to render the selected Event values
 
     onFormSubmit = async (values) => {
+        const { initialValues, updateEvent, openToastr, navigate, createEvent } = this.props;
         try {
-            if (this.props.initialValues.id) {
-                this.props.updateEvent(values)
-                this.props.openToastr('Toastr', { severity: 'success', message: 'Event is Updated SuccessFully' })
-                this.props.navigate(`/event/${this.props.initialValues.id}`)
+            if (initialValues.id) {
+                updateEvent(values)
+                openToastr('Toastr', { severity: 'success', message: 'Event is Updated SuccessFully' })
+                navigate(`/event/${initialValues.id}`)
             } else {
-                let createdEvent = await this.props.createEvent(values)
-                this.props.openToastr('Toastr', { severity: 'success', message: 'Event is Created SuccessFully' })
-                this.props.navigate(`/event/${createdEvent.id}`)
+                let createdEvent = await createEvent(values)
+                openToastr('Toastr', { severity: 'success', message: 'Event is Created SuccessFully' })
+                navigate(`/event/${createdEvent.id}`)
             }
         } catch (error) {
             console.log(error);
-            this.props.openToastr('Toastr', { severity: 'error', message: 'Something went wrong' })
+            openToastr('Toastr', { severity: 'error', message: 'Something went wrong' })
         }
     }
 
-    // handleFieldChange = ({ target: { name, value } }) => {
-    //     this.setState({
-    //         [name]: value
-    //     });
-    // };
     render() {
         const { navigate, initialValues, handleSubmit, invalid, pristine, submitting } = this.props;
         return (
@@ -120,17 +116,10 @@ const mapStateToProps = (state) => {
     var parts = window.location.pathname.split('/');
     var lastSegment = parts.pop() || parts.pop();
 
-    let event = {
-        title: "",
-        category: "",
-        description: "",
-        city: "",
-        venue: "",
-        date: "",
-    };
+    let event = {};
 
-    if (lastSegment && state.events.length > 0) {
-        event = state.events.filter(event => event.id === lastSegment)[0]
+    if (state.firestore.ordered.events && state.firestore.ordered.events.length > 0) {
+        event = state.firestore.ordered.events.filter(event => event.id === lastSegment)[0] || {}
     }
 
     return {
@@ -145,4 +134,4 @@ const mapDispatchToProp = {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProp)(reduxForm({ form: 'eventFrom', validate })(EventForm));
+export default withFirestore(connect(mapStateToProps, mapDispatchToProp)(reduxForm({ form: 'eventFrom', validate, enableReinitialize: true })(EventForm)));

@@ -34,10 +34,13 @@ export const deleteEvent = (event) => {
     }
 }
 export const updateEvent = (event) => {
-    return {
-        type: actionType.UPDATE_EVENT,
-        payload: {
-            event
+    return async (dispatch, getState, { getFirestore }) => {
+        const firestore = getFirestore()
+        try {
+            await firestore.update(`events/${event.id}`, event)
+            dispatch(openToastr('Toastr', { message: "Event is created successfully.", severity: "success" }))
+        } catch (error) {
+            dispatch(openToastr('Toastr', { message: "Something went wrong.", severity: "error" }))
         }
     }
 }
