@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Box, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Chip, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import EventListAttendee from './EventListAttendee'
@@ -7,10 +7,10 @@ import { ThemeBtnPri } from '../../../components/button/ThemeBtn';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment/moment';
 
-export default function EventListItems(props) {
+function EventListItems(props) {
     const navigate = useNavigate()
 
-    const { event, deleteEvent } = props;
+    const { event } = props;
 
     let eventDate, eventTime, eventDay;
     if (event.date) {
@@ -31,10 +31,14 @@ export default function EventListItems(props) {
                             sx={{ width: 56, height: 56 }}
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid item sx={{ flexGrow: 1 }}>
                         <Typography variant='h4'>{event.title}</Typography>
                         <Typography variant='subtitle2'>Hosted By <Link>{event.hostedBy}</Link></Typography>
                     </Grid>
+                    {event.cancelled && <Grid item alignSelf='flex-start'>
+                        <Chip label='Event is cancelled by the host' color='error' />
+                    </Grid>
+                    }
                 </Grid>
             </Box>
             <Divider />
@@ -68,10 +72,12 @@ export default function EventListItems(props) {
                         variant='contained'
                         label='View'
                     />
-                    <ThemeBtnPri onClick={() => deleteEvent(event.id)} variant='contained' color='error' label='Delete' />
+                    {/* <ThemeBtnPri onClick={() => deleteEvent(event.id)} variant='contained' color='error' label='Delete' /> */}
                 </Stack>
             </Box>
             <Divider />
         </Paper>
     )
 }
+
+export default EventListItems;

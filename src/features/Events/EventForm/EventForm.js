@@ -47,8 +47,8 @@ const category = [
 class Kero extends Component {
 
     async componentDidMount() {
-        const { firestore, navigate, params } = this.props;
-        await firestore.get(`events/${params.id}`)
+        const { firestore, params } = this.props;
+        await firestore.setListener(`events/${params.id}`)
     } // to render the selected Event values
 
     onFormSubmit = async (values) => {

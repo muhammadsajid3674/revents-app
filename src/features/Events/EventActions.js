@@ -1,6 +1,7 @@
 import { createNewEvent } from "../../config/common/HelperMethods/createNewEvent"
 import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncActions"
 import { fetchSampleData } from "../data/mockApi"
+import { closeModal, openModal } from "../Modals/ModalActions"
 import { openToastr } from "../toastr/toastrActions"
 import { actionType } from "./EventConstants"
 
@@ -29,10 +30,17 @@ export const createEvent = (event) => {
 export const cancelEvent = (cancelled, eventId) => {
     return async (dispatch, getState, { getFirestore }) => {
         const firestore = getFirestore()
+        const message = cancelled ? 'Do you want to activate the event ?' : 'Do you want to cancel the event ?'
         try {
-            await firestore.update(`events/${eventId}`, {
-                cancelled: cancelled
-            })
+            dispatch(openModal('ConfirmModal', {
+                message,
+                successClick: async () => {
+                    await firestore.update(`events/${eventId}`, {
+                        cancelled: cancelled
+                    })
+                },
+            }));
+            dispatch(closeModal);
         } catch (error) {
             console.log(error);
         }
