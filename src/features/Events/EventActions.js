@@ -25,6 +25,20 @@ export const createEvent = (event) => {
         }
     }
 }
+
+export const cancelEvent = (cancelled, eventId) => {
+    return async (dispatch, getState, { getFirestore }) => {
+        const firestore = getFirestore()
+        try {
+            await firestore.update(`events/${eventId}`, {
+                cancelled: cancelled
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
 export const deleteEvent = (event) => {
     return {
         type: actionType.DELETE_EVENT,

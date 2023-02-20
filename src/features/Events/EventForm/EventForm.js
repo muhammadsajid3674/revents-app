@@ -2,8 +2,8 @@ import { Box, Button, createTheme, Grid, Paper, Stack, ThemeProvider, Typography
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
-import { createEvent, updateEvent } from '../EventActions';
-import { useNavigate } from 'react-router-dom'
+import { createEvent, updateEvent, cancelEvent } from '../EventActions';
+import { useNavigate, useParams } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 import TextInput from '../../../components/ReduxForm/TextInput'
 import TextArea from '../../../components/ReduxForm/TextArea'
@@ -48,10 +48,7 @@ class Kero extends Component {
 
     async componentDidMount() {
         const { firestore, navigate, params } = this.props;
-        let event = await firestore.get(`events/${params.id}`)
-        if (!event.exists) {
-            navigate('*')
-        }
+        await firestore.get(`events/${params.id}`)
     } // to render the selected Event values
 
     onFormSubmit = async (values) => {
@@ -73,7 +70,7 @@ class Kero extends Component {
     }
 
     render() {
-        const { navigate, initialValues, handleSubmit, invalid, pristine, submitting } = this.props;
+        const { navigate, initialValues, handleSubmit, invalid, pristine, submitting, event ,cancelEvent } = this.props;
         return (
             <Grid container >
                 <Grid item md={8}>
@@ -92,11 +89,9 @@ class Kero extends Component {
                             <Field label='Event Date' name='date' component={DateTimePickerField} placeholder='Event Title' />
                             <Stack spacing={1} direction='row'>
                                 <ThemeBtnPri disabled={invalid || submitting || pristine} onClick={handleSubmit(this.onFormSubmit)} variant='contained' label='Submit' />
-                                <ThemeProvider theme={btnTheme}>
-                                    <Button
-                                        onClick={() => (
-                                            initialValues ? navigate(`/event/${initialValues.id}`) : navigate('/event'))} variant='contained' color='grey'>Cancel</Button>
-                                </ThemeProvider>
+                                <ThemeBtnPri onClick={() => (initialValues ? navigate(`/event/${initialValues.id}`) : navigate('/event'))} variant='contained' color='themeGrey' label='Cancel' />
+                                <div style={{flexGrow: 1}}/>
+                                <ThemeBtnPri onClick={() => cancelEvent(!event.cancelled, event.id)} variant='contained' label={event.cancelled ? 'Activate Event' : 'Cancel Event'} color={event.cancelled ? 'success' : 'error'} />
                             </Stack>
                         </Box>
                     </Paper>
@@ -109,7 +104,8 @@ class Kero extends Component {
 // Render Class in Functional Component to use Hooks
 function EventForm(props) {
     let navigate = useNavigate();
-    return <Kero {...props} navigate={navigate} />
+    let params = useParams();
+    return <Kero {...props} params={params} navigate={navigate} />
 }
 
 const mapStateToProps = (state) => {
@@ -123,14 +119,16 @@ const mapStateToProps = (state) => {
     }
 
     return {
-        initialValues: event
+        initialValues: event,
+        event
     };
 }
 
 const mapDispatchToProp = {
     createEvent,
     updateEvent,
-    openToastr
+    openToastr,
+    cancelEvent
 }
 
 
