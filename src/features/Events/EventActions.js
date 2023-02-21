@@ -4,6 +4,7 @@ import { fetchSampleData } from "../data/mockApi"
 import { closeModal, openModal } from "../Modals/ModalActions"
 import { openToastr } from "../toastr/toastrActions"
 import { actionType } from "./EventConstants"
+import { actionType as modalActionType } from "../Modals/ModalConstants"
 
 export const createEvent = (event) => {
     return async (dispatch, getState, { getFirestore }) => {
@@ -31,19 +32,15 @@ export const cancelEvent = (cancelled, eventId) => {
     return async (dispatch, getState, { getFirestore }) => {
         const firestore = getFirestore()
         const message = cancelled ? 'Do you want to activate the event ?' : 'Do you want to cancel the event ?'
-        try {
-            dispatch(openModal('ConfirmModal', {
-                message,
-                successClick: async () => {
-                    await firestore.update(`events/${eventId}`, {
-                        cancelled: cancelled
-                    })
-                },
-            }));
-            dispatch(closeModal);
-        } catch (error) {
-            console.log(error);
-        }
+        dispatch(openModal('ConfirmModal', {
+            message,
+            successClick: async () => {
+                await firestore.update(`events/${eventId}`, {
+                    cancelled: cancelled
+                })
+                dispatch({ type: modalActionType.MODAL_CLOSE });
+            },
+        }));
     }
 }
 
