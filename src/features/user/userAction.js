@@ -97,3 +97,52 @@ export const setMainProfile = (image) => {
         }
     }
 }
+
+export const goingToEvent = (event) => {
+    return async (dispatch, getState, { getFirestore, getFirebase }) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const user = firebase.auth().currentUser;
+        const profile = getState().firebase.profile
+        const attendee = {
+            going: true,
+            joinDate: firestore.FieldValue.serverTimestamp(),
+            photoURL: profile.photoURL,
+            displayName: profile.displayName,
+            host: false
+        }
+        try {
+            await firestore.update(`events/${event.id}`, {
+                [`attendees.${user.uid}`]: attendee
+            })
+            await firestore.set(`event_attendees/${event.id}_${user.uid}`, {
+                eventDate: event.date,
+                eventId: event.id,
+                host: false,
+                userUid: user.uid
+            })
+            dispatch(openToastr('Toastr', { severity: 'success', message: 'You are signup to the event.' }))
+        } catch (error) {
+            console.log(error);
+            dispatch(openToastr('Toastr', { severity: 'error', message: 'Something wen wrong' }))
+        }
+    }
+}
+
+export const cancelGoingToEvent = (event) => {
+    return async (dispatch, getState, { getFirestore, getFirebase }) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const user = firebase.auth().currentUser;
+        try {
+            await firestore.update(`events/${event.id}`, {
+                [`attendees.${user.uid}`]: firestore.FieldValue.delete()
+            })
+            await firestore.delete(`event_attendees/${event.id}_${user.uid}`)
+            dispatch(openToastr('Toastr', { severity: 'success', message: 'Your plane for the event cancel.' }))
+        } catch (error) {
+            console.log(error);
+            dispatch(openToastr('Toastr', { severity: 'error', message: 'Something wen wrong' }))
+        }
+    }
+}

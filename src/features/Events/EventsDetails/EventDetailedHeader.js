@@ -1,11 +1,11 @@
 import { Box, Paper, Stack, Typography } from '@mui/material'
 import moment from 'moment'
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 
 
-export const EventDetailedHeader = ({ event }) => {
+export const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingToEvent }) => {
 
     const navigate = useNavigate()
 
@@ -32,10 +32,14 @@ export const EventDetailedHeader = ({ event }) => {
                 </Stack>
             </Box>
             <Box sx={{ p: 1.5, display: 'flex', gap: 1 }}>
-                <Box sx={{ flexGrow: 1 }}></Box>
-                <Box>
-                    <ThemeBtnPri onClick={() => { navigate(`/manage/${event.id}`) }} label='Manage Event' color="themeOrange" />
+                <Box sx={{ flexGrow: 1 }}>
+                    {!isHost &&
+                        <Fragment>
+                            {isGoing ? <ThemeBtnPri onClick={() => cancelGoingToEvent(event)} label='Cancel My Plane' color="themeGrey" /> : <ThemeBtnPri onClick={() => goingToEvent(event)} label='JOIN THIS EVENT' />}
+                        </Fragment>
+                    }
                 </Box>
+                {isHost && <ThemeBtnPri onClick={() => { navigate(`/manage/${event.id}`) }} label='Manage Event' color="themeOrange" />}
             </Box>
         </Paper >
     )

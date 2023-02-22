@@ -9,25 +9,29 @@ import EventDetailedChat from './EventDetailedChat'
 import { EventDetailedHeader } from './EventDetailedHeader'
 import EventDetailedInfo from './EventDetailedInfo'
 import EventDetailedSidebar from './EventDetailedSidebar'
+import { goingToEvent, cancelGoingToEvent } from '../../user/userAction'
 
 class Kero extends Component {
 
     async componentDidMount() {
-        const { firestore, navigate, params } = this.props;
-        let event = await firestore.get(`events/${params.id}`)
-        if (!event.exists) {
-            navigate('*')
-        }
+        const { firestore, params } = this.props;
+        await firestore.setListener(`events/${params.id}`)
+    }
+    async componentDidUnMount() {
+        const { firestore, params } = this.props;
+        await firestore.unsetListener(`events/${params.id}`)
     }
 
     render() {
-        const { event } = this.props;
+        const { event, auth, goingToEvent, cancelGoingToEvent } = this.props;
         let attendees = event && event.attendees && objectToArray(event.attendees)
+        const isHost = event.hostUid === auth.uid;
+        const isGoing = attendees && attendees.some(a => a.id === auth.uid);
         return (
             <Grid container spacing={2}>
                 <Grid item md={8}>
                     <Stack spacing={2}>
-                        <EventDetailedHeader event={event} />
+                        <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} goingToEvent={goingToEvent} cancelGoingToEvent={cancelGoingToEvent} />
                         <EventDetailedInfo event={event} />
                         <EventDetailedChat />
                     </Stack>
@@ -59,8 +63,14 @@ const mapStateToProp = (state) => {
     }
 
     return {
-        event
+        event,
+        auth: state.firebase.auth
     }
 }
 
-export default withFirestore(connect(mapStateToProp)(EventDetailPage));
+const mapDispatchToProps = {
+    goingToEvent,
+    cancelGoingToEvent
+}
+
+export default withFirestore(connect(mapStateToProp, mapDispatchToProps)(EventDetailPage));
