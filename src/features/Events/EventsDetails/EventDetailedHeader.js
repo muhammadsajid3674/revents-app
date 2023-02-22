@@ -1,7 +1,7 @@
-import { Box, Link, Paper, Stack, Typography } from '@mui/material'
+import { Box, Paper, Stack, Typography } from '@mui/material'
 import moment from 'moment'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 
 
@@ -28,16 +28,11 @@ export const EventDetailedHeader = ({ event }) => {
                 <Stack sx={{ color: '#fff' }}>
                     <Typography variant='h3'>{event.title}</Typography>
                     <Typography variant='body1' sx={{ fontWeight: 600 }}>{eventDay} {eventDate} at {eventTime}</Typography>
-                    <Typography variant='body1' sx={{ fontWeight: 600 }}>Hosted By <Link>{event.hostedBy}</Link></Typography>
+                    <Typography variant='body1' sx={{ fontWeight: 600 }}>Hosted By <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link></Typography>
                 </Stack>
             </Box>
             <Box sx={{ p: 1.5, display: 'flex', gap: 1 }}>
-                <Box>
-                    <ThemeBtnPri label='Cancel My Plane' color="themeGrey" />
-                </Box>
-                <Box sx={{ flexGrow: 1 }}>
-                    <ThemeBtnPri label='JOIN MY EVENT' />
-                </Box>
+                <Box sx={{ flexGrow: 1 }}></Box>
                 <Box>
                     <ThemeBtnPri onClick={() => { navigate(`/manage/${event.id}`) }} label='Manage Event' color="themeOrange" />
                 </Box>

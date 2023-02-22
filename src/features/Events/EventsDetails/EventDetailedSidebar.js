@@ -1,5 +1,6 @@
 import { Box, Chip, createTheme, Grid, Paper, ThemeProvider, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 const theme = createTheme({
   palette: {
@@ -24,7 +25,7 @@ const EventDetailedSidebar = ({ attendees }) => {
               <img src={attendees.photoURL} style={{ maxWidth: '100%' }} alt='' />
             </Grid>
             <Grid item flexGrow={1}>
-              <Typography variant='h6' sx={{ fontWeight: 600 }}>{attendees.name}</Typography>
+              <Typography variant='h6' sx={{ fontWeight: 600 }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/profile/${attendees.id}`}>{attendees.displayName}</Link></Typography>
             </Grid>
             <Grid item alignSelf='start'>
               <ThemeProvider theme={theme}>

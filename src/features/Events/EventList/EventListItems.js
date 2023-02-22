@@ -1,11 +1,12 @@
 import React from 'react'
-import { Avatar, Box, Chip, Divider, Grid, Link, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Chip, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import EventListAttendee from './EventListAttendee'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import moment from 'moment/moment';
+import { objectToArray } from '../../../config/common/HelperMethods/objectToArray';
 
 function EventListItems(props) {
     const navigate = useNavigate()
@@ -32,8 +33,8 @@ function EventListItems(props) {
                         />
                     </Grid>
                     <Grid item sx={{ flexGrow: 1 }}>
-                        <Typography variant='h4'>{event.title}</Typography>
-                        <Typography variant='subtitle2'>Hosted By <Link>{event.hostedBy}</Link></Typography>
+                        <Typography variant='h4'><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/event/${event.id}`}>{event.title}</Link></Typography>
+                        <Typography variant='subtitle2'>Hosted By <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/profile/${event.hostUid}`}>{event.hostedBy}</Link></Typography>
                     </Grid>
                     {event.cancelled && <Grid item alignSelf='flex-start'>
                         <Chip label='Event is cancelled by the host' color='error' />
@@ -58,8 +59,8 @@ function EventListItems(props) {
             <Divider />
             <Box style={{ padding: '10px 15px', backgroundColor: '#eee' }}>
                 <Stack spacing={2} direction='row' alignItems='center'>
-                    {event.attendees && Object.values(event.attendees).map((elem, index) => {
-                        return <EventListAttendee key={index} attendee={elem} />
+                    {event.attendees && objectToArray(event.attendees).map((attendee) => {
+                        return <EventListAttendee key={attendee.id} attendee={attendee} />
                     })}
                 </Stack>
             </Box>

@@ -11,7 +11,8 @@ import EventIcon from '@mui/icons-material/Event';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, isEmpty } from 'react-redux-firebase';
+import { userProfilequery } from '../userProfilequery';
 
 const UserDetailedPage = ({ profile, photos, auth }) => {
 
@@ -58,27 +59,30 @@ const UserDetailedPage = ({ profile, photos, auth }) => {
   )
 }
 
-const query = ({ auth }) => {
-  return [
-    {
-      collection: 'users',
-      doc: auth.uid,
-      subcollections: [
-        { collection: 'photos' }
-      ],
-      storeAs: 'photos'
-    }
-  ]
-}
+const mapStateToProps = (state) => {
+  let parts = window.location.pathname.split('/');
+  let pathId = parts.pop() || parts.pop();
 
-const mapStateToProps = (state) => ({
-  profile: state.firebase.profile,
-  auth: state.firebase.auth,
-  photos: state.firestore.ordered.photos
-})
+  let userId = null;
+  let profile = {};
+
+  if (pathId === state.auth.uid) {
+    profile = state.firebase.profile
+  } else {
+    profile = !isEmpty(state.firestore.ordered.profile) && state.firestore.ordered.profile[0];
+    userId = pathId;
+  }
+
+  return {
+    profile,
+    userId,
+    auth: state.firebase.auth,
+    photos: state.firestore.ordered.photos
+  }
+};
 
 export default compose(
   connect(mapStateToProps),
-  firestoreConnect(auth => query(auth))
+  firestoreConnect((auth, userId) => userProfilequery(auth, userId))
 )
   (UserDetailedPage);

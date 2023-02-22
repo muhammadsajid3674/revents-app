@@ -13,14 +13,6 @@ import DateTimePickerField from '../../../components/ReduxForm/TimeDatePicker'
 import { openToastr } from '../../toastr/toastrActions';
 import { withFirestore } from 'react-redux-firebase';
 
-let btnTheme = createTheme({
-    palette: {
-        grey: {
-            main: '#eee'
-        }
-    }
-})
-
 // Validation
 const validate = combineValidators({
     title: isRequired({ message: 'The event title is required' }),
@@ -51,6 +43,11 @@ class Kero extends Component {
         await firestore.setListener(`events/${params.id}`)
     } // to render the selected Event values
 
+    async componentWillUnmount() {
+        const { firestore, params } = this.props;
+        await firestore.unsetListener(`events/${params.id}`)
+    }
+
     onFormSubmit = async (values) => {
         const { initialValues, updateEvent, openToastr, navigate, createEvent } = this.props;
         try {
@@ -70,7 +67,7 @@ class Kero extends Component {
     }
 
     render() {
-        const { navigate, initialValues, handleSubmit, invalid, pristine, submitting, event ,cancelEvent } = this.props;
+        const { navigate, initialValues, handleSubmit, invalid, pristine, submitting, event, cancelEvent } = this.props;
         return (
             <Grid container >
                 <Grid item md={8}>
@@ -90,7 +87,7 @@ class Kero extends Component {
                             <Stack spacing={1} direction='row'>
                                 <ThemeBtnPri disabled={invalid || submitting || pristine} onClick={handleSubmit(this.onFormSubmit)} variant='contained' label='Submit' />
                                 <ThemeBtnPri onClick={() => (initialValues ? navigate(`/event/${initialValues.id}`) : navigate('/event'))} variant='contained' color='themeGrey' label='Cancel' />
-                                <div style={{flexGrow: 1}}/>
+                                <div style={{ flexGrow: 1 }} />
                                 <ThemeBtnPri onClick={() => cancelEvent(!event.cancelled, event.id)} variant='contained' label={event.cancelled ? 'Activate Event' : 'Cancel Event'} color={event.cancelled ? 'success' : 'error'} />
                             </Stack>
                         </Box>
