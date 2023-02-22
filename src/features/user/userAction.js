@@ -107,7 +107,7 @@ export const goingToEvent = (event) => {
         const attendee = {
             going: true,
             joinDate: firestore.FieldValue.serverTimestamp(),
-            photoURL: profile.photoURL,
+            photoURL: profile.photoURL || '/assets/user.png'    ,
             displayName: profile.displayName,
             host: false
         }

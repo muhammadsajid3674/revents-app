@@ -1,11 +1,12 @@
-import { Box, Divider, Grid, Typography } from '@mui/material'
-import React, { useEffect } from 'react'
+import { Box, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
+import React from 'react'
 import { ThemeBtnSec } from '../../../components/button/ThemeBtn'
 import userImage from '../../../assets/user.png';
-import setDate from '../../../config/common/HelperMethods/setDate';
 import moment from 'moment/moment';
 
-const UserProfile = ({ navigate, profile, auth }) => {
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+const UserProfile = ({ navigate, profile, auth, isCurrentUser }) => {
 
   let age;
   if (profile.dateOfBirth) {
@@ -14,40 +15,58 @@ const UserProfile = ({ navigate, profile, auth }) => {
   }
 
   return (
-    <Grid container spacing={3} justifyContent='center'>
-      <Grid item md={10} sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Box sx={{ width: 200 }}>
-          <img src={profile.photoURL} alt='' style={{ width: '100%', minHeight: 'auto', borderRadius: '100px' }} />
-        </Box>
+    <Paper sx={{ padding: '10px 15px' }}>
+      <Stack direction='row' alignItems='center' spacing={1} sx={{ marginBottom: '0.5rem' }}>
+        <AccountCircleIcon fontSize='large' />
+        <Typography variant='h5'>Profile</Typography>
+      </Stack>
+      <Grid container spacing={3} justifyContent='center'>
+        <Grid item md={10} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ width: 200 }}>
+            <img src={profile.photoURL || require('../../../assets/user.png')} alt='' style={{ width: '100%', minHeight: 'auto', borderRadius: '100px' }} />
+          </Box>
+        </Grid>
+        <Grid item md={5}>
+          <Typography variant='body1'>{profile.displayName}</Typography>
+          <Divider />
+        </Grid>
+        <Grid item md={5}>
+          <Typography variant='body1'>{profile.occupation}</Typography>
+          <Divider />
+        </Grid>
+        <Grid item md={10}>
+          <Typography variant='body1'>{age}, {profile.city}</Typography>
+          <Divider />
+        </Grid>
+        <Grid item md={10}>
+          <Typography variant='body1'>{auth.email}</Typography>
+          <Divider />
+        </Grid>
+        <Grid item md={10} textAlign='center'>
+          {isCurrentUser ? (
+            <ThemeBtnSec onClick={() => { navigate('/settings') }} label='Edit Profile' style={{
+              border: '1px solid #182848',
+              color: '#182848',
+              '&:hover': {
+                transition: "500ms all",
+                backgroundColor: "#182848 !important",
+                color: '#fff',
+              }
+            }} />
+          ) : (
+            <ThemeBtnSec label='Follow User' style={{
+              border: '1px solid #182848',
+              color: '#182848',
+              '&:hover': {
+                transition: "500ms all",
+                backgroundColor: "#182848 !important",
+                color: '#fff',
+              }
+            }} />
+          )}
+        </Grid>
       </Grid>
-      <Grid item md={5}>
-        <Typography variant='body1'>{profile.displayName}</Typography>
-        <Divider />
-      </Grid>
-      <Grid item md={5}>
-        <Typography variant='body1'>{profile.occupation}</Typography>
-        <Divider />
-      </Grid>
-      <Grid item md={10}>
-        <Typography variant='body1'>{age}, {profile.city}</Typography>
-        <Divider />
-      </Grid>
-      <Grid item md={10}>
-        <Typography variant='body1'>{auth.email}</Typography>
-        <Divider />
-      </Grid>
-      <Grid item md={10} textAlign='center'>
-        <ThemeBtnSec onClick={() => { navigate('/settings') }} label='Edit Profile' style={{
-          border: '1px solid #182848',
-          color: '#182848',
-          '&:hover': {
-            transition: "500ms all",
-            backgroundColor: "#182848 !important",
-            color: '#fff',
-          }
-        }} />
-      </Grid>
-    </Grid>
+    </Paper>
   )
 }
 

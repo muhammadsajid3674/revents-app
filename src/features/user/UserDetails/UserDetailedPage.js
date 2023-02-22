@@ -1,14 +1,10 @@
 import React from 'react'
-import { Grid, Paper, Stack, Typography } from '@mui/material'
+import { Grid, Stack } from '@mui/material'
 import UserEventDetail from './UserEventDetail';
 import UserProfile from './UserProfile';
 import UserPhotos from './UserPhotos';
 import UserDescription from './UserDescription';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import DescriptionIcon from '@mui/icons-material/Description';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
-import EventIcon from '@mui/icons-material/Event';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect, isEmpty } from 'react-redux-firebase';
@@ -16,43 +12,22 @@ import { userProfilequery } from '../userProfilequery';
 
 const UserDetailedPage = ({ profile, photos, auth }) => {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const params = useParams();
+  const isCurrentUser = auth.uid === params.id;
+
   return (
     <Grid container spacing={3}>
       <Grid item md={6}>
         <Stack spacing={3}>
-          <Paper sx={{ padding: '10px 15px' }}>
-            <Stack direction='row' alignItems='center' spacing={1} sx={{ marginBottom: '0.5rem' }}>
-              <AccountCircleIcon fontSize='large' />
-              <Typography variant='h5'>Profile</Typography>
-            </Stack>
-            <UserProfile navigate={navigate} profile={profile} auth={auth} />
-          </Paper>
-          <Paper sx={{ padding: '10px 15px' }}>
-            <Stack direction='row' alignItems='center' spacing={1} sx={{ marginBottom: '0.5rem' }}>
-              <DescriptionIcon fontSize='large' />
-              <Typography variant='h5'>About {profile.displayName}</Typography>
-            </Stack>
-            <UserDescription profile={profile} />
-          </Paper>
+          <UserProfile navigate={navigate} profile={profile} auth={auth} isCurrentUser={isCurrentUser} />
+          <UserDescription profile={profile} />
         </Stack>
       </Grid>
       <Grid item md={6}>
         <Stack spacing={3}>
-          <Paper sx={{ padding: '10px 15px' }}>
-            <Stack direction='row' alignItems='center' spacing={1} sx={{ marginBottom: '0.5rem' }}>
-              <InsertPhotoIcon fontSize='large' />
-              <Typography variant='h5'>Photos</Typography>
-            </Stack>
-            <UserPhotos photos={photos} />
-          </Paper>
-          <Paper sx={{ padding: '10px 15px' }}>
-            <Stack direction='row' alignItems='center' spacing={1} sx={{ marginBottom: '0.5rem' }}>
-              <EventIcon fontSize='large' />
-              <Typography variant='h5'>Events</Typography>
-            </Stack>
-            <UserEventDetail />
-          </Paper>
+          <UserPhotos photos={photos} />
+          <UserEventDetail />
         </Stack>
       </Grid>
     </Grid>

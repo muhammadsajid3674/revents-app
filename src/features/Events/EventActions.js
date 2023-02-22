@@ -1,7 +1,6 @@
 import { createNewEvent } from "../../config/common/HelperMethods/createNewEvent"
-import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncActions"
 import { fetchSampleData } from "../data/mockApi"
-import { closeModal, openModal } from "../Modals/ModalActions"
+import { openModal } from "../Modals/ModalActions"
 import { openToastr } from "../toastr/toastrActions"
 import { actionType } from "./EventConstants"
 import { actionType as modalActionType } from "../Modals/ModalConstants"
@@ -60,20 +59,6 @@ export const updateEvent = (event) => {
             dispatch(openToastr('Toastr', { message: "Event is created successfully.", severity: "success" }))
         } catch (error) {
             dispatch(openToastr('Toastr', { message: "Something went wrong.", severity: "error" }))
-        }
-    }
-}
-
-export const loadEvent = () => {
-    return async dispatch => {
-        try {
-            dispatch(asyncActionStart())
-            const events = await fetchSampleData()
-            dispatch({ type: actionType.FETCH_EVENTS, payload: { events } })
-            dispatch(asyncActionFinish())
-        } catch (error) {
-            console.log(error);
-            dispatch(asyncActionError())
         }
     }
 }
