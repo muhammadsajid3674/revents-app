@@ -6,7 +6,7 @@ import EventList from '../features/Events/EventList/EventList'
 import { createEvent, deleteEvent, updateEvent } from '../features/Events/EventActions';
 import BackdropLoader from '../components/loading/MuiBackdrop';
 import EventActivity from '../features/Events/EventActivity/EventActivity';
-import { firestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, isLoaded } from 'react-redux-firebase';
 import { compose } from 'redux';
 
 class EventDashboard extends Component {
@@ -16,7 +16,7 @@ class EventDashboard extends Component {
   }
 
   render() {
-    if (this.props.isLoading) return <BackdropLoader />
+    if (!isLoaded(this.props.events)) return <BackdropLoader />
     return (
       <Grid container spacing={2}>
         <Grid item md={7}>
@@ -34,7 +34,6 @@ const mapStateToProp = (state) => {
   return {
     events: state.firestore.ordered.events,
     // events: sampleData,
-    isLoading: state.async.loading
   }
 }
 

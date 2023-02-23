@@ -1,6 +1,8 @@
 import React from 'react'
 import { Grid, Paper, Stack, Typography } from '@mui/material'
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import LazyLoad from 'react-lazyload';
+import brokenImage from '../../../assets/user.png'
 
 const UserPhotos = ({ photos }) => {
     return (
@@ -12,7 +14,9 @@ const UserPhotos = ({ photos }) => {
             <Grid container spacing={1}>
                 {photos && photos.length > 0 ? photos.map(e => {
                     return <Grid key={e.id} item md={3}>
-                        <img src={e.url} style={{ width: '100%', minHeight: 'auto' }} alt='' />
+                        <LazyLoad height={150} offset={-100} placeholder={<img src={brokenImage} style={{ width: '100%', minHeight: 'auto' }} alt='' />}>
+                            <img src={e.url} style={{ width: '100%', minHeight: 'auto' }} alt='' />
+                        </LazyLoad>
                     </Grid>
                 }) : null}
             </Grid>

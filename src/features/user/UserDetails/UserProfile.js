@@ -1,10 +1,11 @@
 import { Box, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { ThemeBtnSec } from '../../../components/button/ThemeBtn'
-import userImage from '../../../assets/user.png';
+import brokenImage from '../../../assets/user.png';
 import moment from 'moment/moment';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LazyLoad from 'react-lazyload';
 
 const UserProfile = ({ navigate, profile, auth, isCurrentUser }) => {
 
@@ -23,7 +24,9 @@ const UserProfile = ({ navigate, profile, auth, isCurrentUser }) => {
       <Grid container spacing={3} justifyContent='center'>
         <Grid item md={10} sx={{ display: 'flex', justifyContent: 'center' }}>
           <Box sx={{ width: 200 }}>
-            <img src={profile.photoURL || require('../../../assets/user.png')} alt='' style={{ width: '100%', minHeight: 'auto', borderRadius: '100px' }} />
+            <LazyLoad height={150} offset={-100} placeholder={<img src={brokenImage} style={{ width: '100%', minHeight: 'auto' }} alt='' />}>
+              <img src={profile.photoURL || require('../../../assets/user.png')} alt='' style={{ width: '100%', minHeight: 'auto', borderRadius: '100px' }} />
+            </LazyLoad>
           </Box>
         </Grid>
         <Grid item md={5}>

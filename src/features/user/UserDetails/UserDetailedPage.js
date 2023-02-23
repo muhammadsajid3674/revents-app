@@ -9,13 +9,18 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect, isEmpty } from 'react-redux-firebase';
 import { userProfilequery } from '../userProfilequery';
+import BackdropLoader from '../../../components/loading/MuiBackdrop';
 
-const UserDetailedPage = ({ profile, photos, auth }) => {
+const UserDetailedPage = ({ profile, photos, auth, requesting }) => {
 
   const navigate = useNavigate();
+
   const params = useParams();
   const isCurrentUser = auth.uid === params.id;
 
+  const loading = Object.values(requesting).some(a => a === true);
+
+  if (loading) return <BackdropLoader />
   return (
     <Grid container spacing={3}>
       <Grid item md={6}>
@@ -52,7 +57,8 @@ const mapStateToProps = (state) => {
     profile,
     userId,
     auth: state.firebase.auth,
-    photos: state.firestore.ordered.photos
+    photos: state.firestore.ordered.photos,
+    requesting: state.firestore.status.requesting
   }
 };
 
