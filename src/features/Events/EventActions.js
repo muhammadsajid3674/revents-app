@@ -4,6 +4,8 @@ import { openModal } from "../Modals/ModalActions"
 import { openToastr } from "../toastr/toastrActions"
 import { actionType } from "./EventConstants"
 import { actionType as modalActionType } from "../Modals/ModalConstants"
+import firebase from '../../config/Firebase/FirebaseConfig'
+import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncActions"
 
 export const createEvent = (event) => {
     return async (dispatch, getState, { getFirestore }) => {
@@ -43,14 +45,6 @@ export const cancelEvent = (cancelled, eventId) => {
     }
 }
 
-export const deleteEvent = (event) => {
-    return {
-        type: actionType.DELETE_EVENT,
-        payload: {
-            event
-        }
-    }
-}
 export const updateEvent = (event) => {
     return async (dispatch, getState, { getFirestore }) => {
         const firestore = getFirestore()
@@ -59,6 +53,31 @@ export const updateEvent = (event) => {
             dispatch(openToastr('Toastr', { message: "Event is created successfully.", severity: "success" }))
         } catch (error) {
             dispatch(openToastr('Toastr', { message: "Something went wrong.", severity: "error" }))
+        }
+    }
+};
+
+export const getEventsForDashboard = () => {
+    return async (dispatch, getState) => {
+        const currentDate = new Date();
+        const firestore = firebase.firestore();
+        const eventQuery = firestore.collection('events').where('date', '>=', currentDate);
+        try {
+            dispatch(asyncActionStart())
+            let querySnap = await eventQuery.get();
+            let events = [];
+            for (let i = 0; i < querySnap.docs.length; i++) {
+                let evt = {
+                    ...querySnap.docs[i].data(),
+                    id: querySnap.docs[i].id
+                }
+                events.push(evt);
+            }
+            dispatch({ type: actionType.FETCH_EVENTS, payload: { events } })
+            dispatch(asyncActionFinish())
+        } catch (error) {
+            console.log(error);
+            dispatch(asyncActionError())
         }
     }
 }

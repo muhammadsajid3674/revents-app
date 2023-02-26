@@ -3,7 +3,7 @@ import { Grid } from '@mui/material'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import EventList from '../features/Events/EventList/EventList'
-import { createEvent, deleteEvent, updateEvent } from '../features/Events/EventActions';
+import { getEventsForDashboard } from '../features/Events/EventActions';
 import BackdropLoader from '../components/loading/MuiBackdrop';
 import EventActivity from '../features/Events/EventActivity/EventActivity';
 import { firestoreConnect, isLoaded } from 'react-redux-firebase';
@@ -11,16 +11,16 @@ import { compose } from 'redux';
 
 class EventDashboard extends Component {
 
-  handleDeleteEvent = (id) => {
-    this.props.deleteEvent(id)
+  componentDidMount() {
+    this.props.getEventsForDashboard();
   }
 
   render() {
-    if (!isLoaded(this.props.events)) return <BackdropLoader />
+    if (this.props.loading) return <BackdropLoader />
     return (
       <Grid container spacing={2}>
         <Grid item md={7}>
-          <EventList events={this.props.events} deleteEvent={this.handleDeleteEvent} />
+          <EventList events={this.props.events} />
         </Grid>
         <Grid item md={5}>
           <EventActivity />
@@ -32,15 +32,13 @@ class EventDashboard extends Component {
 
 const mapStateToProp = (state) => {
   return {
-    events: state.firestore.ordered.events,
-    // events: sampleData,
+    events: state.events,
+    loading: state.async.loading
   }
 }
 
 const mapDispatchToProp = {
-  createEvent,
-  deleteEvent,
-  updateEvent,
+  getEventsForDashboard
 }
 
 export default compose(firestoreConnect([{ collection: 'events' }]), connect(mapStateToProp, mapDispatchToProp))(EventDashboard);
