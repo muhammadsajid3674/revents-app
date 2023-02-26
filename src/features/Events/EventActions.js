@@ -57,14 +57,21 @@ export const updateEvent = (event) => {
     }
 };
 
-export const getEventsForDashboard = () => {
+export const getEventsForDashboard = (lastEvent) => {
     return async (dispatch, getState) => {
         const currentDate = new Date();
         const firestore = firebase.firestore();
-        const eventQuery = firestore.collection('events').where('date', '>=', currentDate);
+        const eventRef = firestore.collection('events');
         try {
             dispatch(asyncActionStart())
-            let querySnap = await eventQuery.get();
+            let startAfter = lastEvent && (await firestore.collection('events').doc(lastEvent.id).get());
+            let query;
+            lastEvent ? query = eventRef.orderBy('date').startAfter(startAfter).limit(3) : query = eventRef.orderBy('date').limit(3);
+            let querySnap = await query.get();
+            if (querySnap.docs.length === 0) {
+                dispatch(asyncActionFinish())
+                return querySnap;
+            };
             let events = [];
             for (let i = 0; i < querySnap.docs.length; i++) {
                 let evt = {
@@ -72,9 +79,10 @@ export const getEventsForDashboard = () => {
                     id: querySnap.docs[i].id
                 }
                 events.push(evt);
-            }
-            dispatch({ type: actionType.FETCH_EVENTS, payload: { events } })
-            dispatch(asyncActionFinish())
+            };
+            dispatch({ type: actionType.FETCH_EVENTS, payload: { events } });
+            dispatch(asyncActionFinish());
+            return querySnap;
         } catch (error) {
             console.log(error);
             dispatch(asyncActionError())

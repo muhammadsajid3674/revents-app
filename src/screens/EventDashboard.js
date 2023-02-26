@@ -1,5 +1,5 @@
 
-import { Grid } from '@mui/material'
+import { CircularProgress, Grid } from '@mui/material'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import EventList from '../features/Events/EventList/EventList'
@@ -8,22 +8,58 @@ import BackdropLoader from '../components/loading/MuiBackdrop';
 import EventActivity from '../features/Events/EventActivity/EventActivity';
 import { firestoreConnect, isLoaded } from 'react-redux-firebase';
 import { compose } from 'redux';
+import { ThemeBtnPri } from '../components/button/ThemeBtn';
 
 class EventDashboard extends Component {
+  state = {
+    moreEvents: false,
+    initialLoading: true,
+    loadEvents: []
+  }
 
-  componentDidMount() {
-    this.props.getEventsForDashboard();
+  async componentDidMount() {
+    let next = await this.props.getEventsForDashboard();
+    if (next && next.docs && next.docs.length > 1) {
+      this.setState({
+        moreEvents: true,
+        initialLoading: false
+      })
+    }
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.events !== prevProps.events) {
+      this.setState({
+        loadEvents: [...this.state.loadEvents, ...this.props.events]
+      })
+    }
+  }
+
+  getNextEvent = async () => {
+    const { events } = this.props;
+    const lastEvent = events && events[events.length - 1];
+    console.log(lastEvent);
+    const next = await this.props.getEventsForDashboard(lastEvent);
+    console.log(next);
+    if (next && next.docs && next.docs.length <= 1) {
+      this.setState({
+        moreEvents: false
+      })
+    }
   }
 
   render() {
-    if (this.props.loading) return <BackdropLoader />
+    if (this.state.initialLoading) return <BackdropLoader />
     return (
       <Grid container spacing={2}>
         <Grid item md={7}>
-          <EventList events={this.props.events} />
+          <EventList events={this.state.loadEvents} isLoading={this.props.loading} nextEvent={this.getNextEvent} moreEvents={this.state.moreEvents} />
         </Grid>
         <Grid item md={5}>
           <EventActivity />
+        </Grid>
+        <Grid item md={7} textAlign='center'>
+          {this.props.loading && <CircularProgress />}
         </Grid>
       </Grid>
     )
