@@ -61,3 +61,12 @@
     height: auto;
     color: #fff;
 }
+
+.link {
+    color: #aaa;
+}
+
+.link:hover {
+    cursor: pointer;
+    color: inherit
+}

@@ -1,5 +1,4 @@
 import { createNewEvent } from "../../config/common/HelperMethods/createNewEvent"
-import { fetchSampleData } from "../data/mockApi"
 import { openModal } from "../Modals/ModalActions"
 import { openToastr } from "../toastr/toastrActions"
 import { actionType } from "./EventConstants"
@@ -86,6 +85,28 @@ export const getEventsForDashboard = (lastEvent) => {
         } catch (error) {
             console.log(error);
             dispatch(asyncActionError())
+        }
+    }
+}
+
+export const addEventComment = (eventId, value, parentId) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        const profile = getState().firebase.profile;
+        const user = firebase.auth().currentUser;
+        try {
+            let newComment = {
+                // parentId,
+                displayName: profile.displayName,
+                date: Date.now(),
+                photoURL: profile.photoURL || '/assets/user.png',
+                comment: value.comment,
+                user: user.uid
+            }
+            await firebase.push(`event_chat/${eventId}`, newComment)
+        } catch (error) {
+            console.log(error);
+            dispatch(openToastr('Toastr', { message: "Something went wrong.", severity: "error" }))
         }
     }
 }

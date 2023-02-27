@@ -6,7 +6,6 @@ import InfoIcon from '@mui/icons-material/Info';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { createTheme, Divider, ListItemIcon, ThemeProvider } from '@mui/material';
-import { ThemeBtnPri } from '../../../components/button/ThemeBtn';
 import moment from 'moment';
 
 const themeIcon = createTheme({
@@ -49,7 +48,7 @@ export default function EventDetailedInfo({ event }) {
                         <LocationOnIcon color="themeDefault" />
                     </ListItemIcon>
                     <ListItemText primary={event.venue} />
-                    <ThemeBtnPri label='Show Map' />
+                    {/* <ThemeBtnPri label='Show Map' /> */}
                 </ListItem>
             </List>
         </ThemeProvider>
