@@ -1,42 +1,58 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Grid, Stack } from '@mui/material'
+import { useNavigate, useParams } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { getUserEvent } from '../userAction'
+import { firestoreConnect, isEmpty } from 'react-redux-firebase';
+import { userProfilequery } from '../userProfilequery';
+import BackdropLoader from '../../../components/loading/MuiBackdrop';
 import UserEventDetail from './UserEventDetail';
 import UserProfile from './UserProfile';
 import UserPhotos from './UserPhotos';
 import UserDescription from './UserDescription';
-import { useNavigate, useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect, isEmpty } from 'react-redux-firebase';
-import { userProfilequery } from '../userProfilequery';
-import BackdropLoader from '../../../components/loading/MuiBackdrop';
 
-const UserDetailedPage = ({ profile, photos, auth, requesting }) => {
+class Kero extends Component {
 
-  const navigate = useNavigate();
+  async componentDidMount() {
+    await this.props.getUserEvent(this.props.userId);
+  }
 
-  const params = useParams();
-  const isCurrentUser = auth.uid === params.id;
+  tabChange = (e, data) => {
+    this.props.getUserEvent(this.props.userId, data)
+  }
 
-  const loading = Object.values(requesting).some(a => a === true);
+  render() {
+    const { navigate, params, auth, profile, photos, requesting, events, eventLoading } = this.props;
+    const isCurrentUser = auth.uid === params.id;
 
-  if (loading) return <BackdropLoader />
-  return (
-    <Grid container spacing={3}>
-      <Grid item md={6}>
-        <Stack spacing={3}>
-          <UserProfile navigate={navigate} profile={profile} auth={auth} isCurrentUser={isCurrentUser} />
-          <UserDescription profile={profile} />
-        </Stack>
+    const loading = Object.values(requesting).some(a => a === true);
+
+    if (loading) return <BackdropLoader />
+    return (
+      <Grid container spacing={3}>
+        <Grid item md={6}>
+          <Stack spacing={3}>
+            <UserProfile navigate={navigate} profile={profile} auth={auth} isCurrentUser={isCurrentUser} />
+            <UserDescription profile={profile} />
+          </Stack>
+        </Grid>
+        <Grid item md={6}>
+          <Stack spacing={3}>
+            <UserPhotos photos={photos} />
+            <UserEventDetail events={events} eventLoading={eventLoading} tabChange={this.tabChange} />
+          </Stack>
+        </Grid>
       </Grid>
-      <Grid item md={6}>
-        <Stack spacing={3}>
-          <UserPhotos photos={photos} />
-          <UserEventDetail />
-        </Stack>
-      </Grid>
-    </Grid>
-  )
+    )
+  }
+}
+
+// Render Class in Functional Component to use Hooks
+function UserDetailedPage(props) {
+  let navigate = useNavigate();
+  let params = useParams();
+  return <Kero {...props} params={params} navigate={navigate} />
 }
 
 const mapStateToProps = (state) => {
@@ -58,12 +74,18 @@ const mapStateToProps = (state) => {
     userId,
     auth: state.firebase.auth,
     photos: state.firestore.ordered.photos,
-    requesting: state.firestore.status.requesting
+    requesting: state.firestore.status.requesting,
+    events: state.events,
+    eventLoading: state.async.loading
   }
 };
 
+const mapDispatchToProps = {
+  getUserEvent
+}
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   firestoreConnect((auth, userId) => userProfilequery(auth, userId))
 )
   (UserDetailedPage);

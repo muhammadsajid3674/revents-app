@@ -4,9 +4,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Card, CardActionArea, CardContent, CardMedia, Grid, Paper, Stack } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, CircularProgress, Grid, Paper, Stack } from '@mui/material';
 import eventImage from '../../../assets/categoryImages/travel.jpg';
 import EventIcon from '@mui/icons-material/Event';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -41,12 +43,8 @@ function a11yProps(index) {
     };
 }
 
-export default function UserEventDetail() {
+export default function UserEventDetail({ events, eventLoading, tabChange }) {
     const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
 
     return (
         <Paper sx={{ padding: '10px 15px' }}>
@@ -56,125 +54,47 @@ export default function UserEventDetail() {
             </Stack>
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} textColor="primary" indicatorColor="primary" aria-label="basic tabs example">
-                        <Tab label="All Event" {...a11yProps('all')} />
-                        <Tab label="Future Event" {...a11yProps('future')} />
-                        <Tab label="Past Event" {...a11yProps('past')} />
-                        <Tab label="Events Hosted" {...a11yProps('hosted')} />
+                    <Tabs value={value} onChange={(e, data) => { tabChange(e, data); setValue(data); }} textColor="primary" indicatorColor="primary" aria-label="basic tabs example">
+                        <Tab label="All Event" {...a11yProps(0)} />
+                        <Tab label="Past Event" {...a11yProps(1)} />
+                        <Tab label="Future Event" {...a11yProps(2)} />
+                        <Tab label="Events Hosted" {...a11yProps(3)} />
                     </Tabs>
                 </Box>
-                <TabPanel value={value} index={0}>
+                <TabPanel value={value} index={value}>
                     <Grid container spacing={2}>
-                        <Grid item md={4}>
-                            <Card sx={{ maxWidth: 200 }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={eventImage}
-                                        alt="green iguana"
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Event name
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Date
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
-                        <Grid item md={4}>
-                            <Card sx={{ maxWidth: 200 }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={eventImage}
-                                        alt="green iguana"
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Event name
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Date
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
-                        <Grid item md={4}>
-                            <Card sx={{ maxWidth: 200 }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={eventImage}
-                                        alt="green iguana"
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Event name
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Date
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
-                        <Grid item md={4}>
-                            <Card sx={{ maxWidth: 200 }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={eventImage}
-                                        alt="green iguana"
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Event name
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Date
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
-                        <Grid item md={4}>
-                            <Card sx={{ maxWidth: 200 }}>
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={eventImage}
-                                        alt="green iguana"
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            Event name
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Date
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
+                        {eventLoading ? <Grid item md={12} textAlign='center'>
+                            <CircularProgress />
+                        </Grid> : <>
+                            {events && events.map(event => {
+                                return <Grid item md={4} key={event.id}>
+                                    <Card sx={{ maxWidth: 200 }}>
+                                        <CardActionArea>
+                                            <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/event/${event.id}`}>
+                                                <CardMedia
+                                                    component="img"
+                                                    height="80"
+                                                    image={require(`../../../assets/categoryImages/${event.category}.jpg`)}
+                                                    alt={event.title}
+                                                />
+                                                <CardContent sx={{ p: 1.5 }}>
+                                                    <Typography gutterBottom variant="h6" component="div">
+                                                        {event.title}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {moment(event.date.toDate()).format('DD MMM YYYY')}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {moment(event.date.toDate()).format('hh:mm a')}
+                                                    </Typography>
+                                                </CardContent>
+                                            </Link>
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid>
+                            })}
+                        </>}
                     </Grid>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    Item Two
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    Item Three
-                </TabPanel>
-                <TabPanel value={value} index={3}>
-                    Item Three
                 </TabPanel>
             </Box>
         </Paper>
