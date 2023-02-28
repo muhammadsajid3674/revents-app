@@ -58,7 +58,7 @@ export const updateEvent = (event) => {
 
 export const getEventsForDashboard = (lastEvent) => {
     return async (dispatch, getState) => {
-        const currentDate = new Date();
+        // const currentDate = new Date();
         const firestore = firebase.firestore();
         const eventRef = firestore.collection('events');
         try {
@@ -96,7 +96,7 @@ export const addEventComment = (eventId, value, parentId) => {
         const user = firebase.auth().currentUser;
         try {
             let newComment = {
-                // parentId,
+                parentId: parentId,
                 displayName: profile.displayName,
                 date: Date.now(),
                 photoURL: profile.photoURL || '/assets/user.png',

@@ -12,6 +12,8 @@ import EventDetailedSidebar from './EventDetailedSidebar'
 import { goingToEvent, cancelGoingToEvent } from '../../user/userAction'
 import { addEventComment } from '../EventActions'
 import { compose } from 'redux'
+import { getIdFromPath } from '../../../config/common/HelperMethods/getIdFromPath'
+import { createDataTree } from '../../../config/common/HelperMethods/createDataTree'
 
 class Kero extends Component {
 
@@ -29,13 +31,14 @@ class Kero extends Component {
         let attendees = event && event.attendees && objectToArray(event.attendees)
         const isHost = event.hostUid === auth.uid;
         const isGoing = attendees && attendees.some(a => a.id === auth.uid);
+        const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
         return (
             <Grid container spacing={2}>
                 <Grid item md={8}>
                     <Stack spacing={2}>
                         <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} goingToEvent={goingToEvent} cancelGoingToEvent={cancelGoingToEvent} />
                         <EventDetailedInfo event={event} />
-                        <EventDetailedChat addEventComment={addEventComment} eventId={event.id} eventChat={eventChat} />
+                        <EventDetailedChat addEventComment={addEventComment} eventId={event.id} eventChat={chatTree} />
                     </Stack>
                 </Grid>
                 <Grid item md={4}>
@@ -53,22 +56,18 @@ function EventDetailPage(props) {
     return <Kero {...props} params={params} navigate={navigate} />
 }
 
-// To get ID from path
-let parts = window.location.pathname.split('/');
-let pathId = parts.pop() || parts.pop();
-
 const mapStateToProp = (state) => {
 
     let event = {};
 
     if (state.firestore.ordered.events && state.firestore.ordered.events.length > 0) {
-        event = state.firestore.ordered.events.filter(event => event.id === pathId)[0] || {}
+        event = state.firestore.ordered.events.filter(event => event.id === getIdFromPath())[0] || {}
     }
 
     return {
         event,
         auth: state.firebase.auth,
-        eventChat: !isEmpty(state.firebase.data.event_chat) && objectToArray(state.firebase.data.event_chat[pathId])
+        eventChat: !isEmpty(state.firebase.data.event_chat) && objectToArray(state.firebase.data.event_chat[getIdFromPath()])
     }
 }
 
@@ -81,5 +80,5 @@ const mapDispatchToProps = {
 export default compose(
     withFirestore,
     connect(mapStateToProp, mapDispatchToProps),
-    firebaseConnect([`event_chat/${pathId}`])
+    firebaseConnect([`event_chat/${getIdFromPath()}`])
 )(EventDetailPage);
