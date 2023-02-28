@@ -38,7 +38,6 @@ class EventDashboard extends Component {
   getNextEvent = async () => {
     const { events } = this.props;
     const lastEvent = events && events[events.length - 1];
-    console.log(lastEvent);
     const next = await this.props.getEventsForDashboard(lastEvent);
     console.log(next);
     if (next && next.docs && next.docs.length <= 1) {

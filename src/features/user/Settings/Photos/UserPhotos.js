@@ -1,9 +1,10 @@
 import React from 'react'
-import { Button, Card, CardActions, CardMedia, Typography, Stack, Grid } from '@mui/material'
+import { Button, Card, CardActions, CardMedia, Typography, Grid } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import brokenImage from '../../../../assets/user.png';
+import { ThemeBtnPri } from '../../../../components/button/ThemeBtn';
 
-const UserPhotos = ({ photo, profile, deleteImage, setMainProfile }) => {
+const UserPhotos = ({ photo, profile, deleteImage, setMainProfile, loading }) => {
     let filteredPhotos;
     if (photo) {
         filteredPhotos = photo.filter((e, i) => {
@@ -36,7 +37,7 @@ const UserPhotos = ({ photo, profile, deleteImage, setMainProfile }) => {
                                 image={e.url}
                             />
                             <CardActions sx={{ justifyContent: 'space-between' }} >
-                                <Button size="small" color='success' sx={{ fontWeight: 600 }} onClick={() => setMainProfile(e)}>Main</Button>
+                                <ThemeBtnPri variant='standard' size="small" color='success' isLoading={loading} onClick={() => setMainProfile(e)} label='Main' />
                                 <Button size="small" color='error' onClick={() => deleteImage(e)}><DeleteIcon /></Button>
                             </CardActions>
                         </Card>

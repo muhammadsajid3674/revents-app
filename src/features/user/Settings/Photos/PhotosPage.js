@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Divider, Grid, Paper, Stack, Typography } from '@mui/material'
+import { Box, Button, ButtonGroup, Divider, Grid, Paper, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useEffect, useState } from 'react'
 import DropzoneInput from './DropzoneInput';
@@ -84,7 +84,7 @@ const PhotosPage = ({ uploadProfileImage, deleteImage, setMainProfile, photos, p
           </Grid>
         </Grid>
         <Divider sx={{ margin: '10px 0 10px 0' }} />
-        <UserPhotos photo={photos} profile={profile} deleteImage={handleDeleteImage} setMainProfile={handleSetMainProfile} />
+        <UserPhotos photo={photos} profile={profile} deleteImage={handleDeleteImage} setMainProfile={handleSetMainProfile} loading={loading} />
       </Box>
     </Paper>
   )

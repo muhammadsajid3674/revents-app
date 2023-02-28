@@ -28,11 +28,11 @@ export function ThemeBtnSec(props) {
 }
 export function ThemeBtnPri(props) {
 
-    const { label, onClick, variant, className, disabled, color, isLoading, startIcon } = props;
+    const { label, onClick, variant, className, disabled, color, isLoading, startIcon, size } = props;
 
     return (
         <ThemeProvider theme={themePalette}>
-            <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} startIcon={startIcon} onClick={onClick} className={className} style={{ fontWeight: 600 }}>
+            <Button disabled={disabled ?? isLoading} variant={variant ?? 'contained'} color={color ?? 'themeDefault'} size={size} startIcon={startIcon} onClick={onClick} className={className} style={{ fontWeight: 600 }}>
                 {isLoading ? <CircularProgress size={24} sx={{ color: '#182848' }} /> : label}
             </Button>
         </ThemeProvider>

@@ -85,15 +85,41 @@ export const deleteImage = (image) => {
     }
 }
 
-export const setMainProfile = (image) => {
-    return async (dispatch, getState, { getFirebase }) => {
-        const firebase = getFirebase();
+export const setMainProfile = (photo) => {
+    return async (dispatch, getState) => {
+        const firestore = firebase.firestore();
+        const user = firebase.auth().currentUser;
+        const today = new Date();
+        const userDocRef = firestore.collection('users').doc(user.uid);
+        const attendeeDocref = firestore.collection('event_attendees');
         try {
-            await firebase.updateProfile({
-                photoURL: image.url
+            dispatch(asyncActionStart())
+            let batch = firestore.batch()
+            batch.update(userDocRef, {
+                photoURL: photo.url
             })
+            let eventQuery = await attendeeDocref.where('userUid', '==', user.uid).where('eventDate', '>=', today);
+            let eventQuerySnap = await eventQuery.get();
+            for (let i = 0; i < eventQuerySnap.docs.length; i++) {
+                let eventDocRef = await firestore.collection('events').doc(eventQuerySnap.docs[i].data().eventId);
+                let event = await eventDocRef.get();
+                if (event.data().hostUid === user.uid) {
+                    batch.update(eventDocRef, {
+                        hostPhotoURL: photo.url,
+                        [`attendees.${user.uid}.photoURL`]: photo.url
+                    })
+                } else {
+                    batch.update(eventDocRef, {
+                        [`attendees.${user.uid}.photoURL`]: photo.url
+                    })
+                }
+            }
+            console.log(batch);
+            batch.commit()
+            dispatch(asyncActionFinish())
         } catch (error) {
             console.log(error);
+            dispatch(asyncActionError())
             throw new Error('Problem while setting main profile')
         }
     }
