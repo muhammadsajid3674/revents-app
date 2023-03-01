@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Avatar, Box, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import moment from 'moment';
 import EventDetailedChatForm from './EventDetailedChatForm';
@@ -32,7 +32,7 @@ class EventDetailedChat extends Component {
                 {/* Comment Section */}
                 <Box sx={{ p: 1.5 }}>
                     {eventChat && eventChat.map(value => {
-                        return <>
+                        return <Fragment key={value.id}>
                             <Grid container spacing={1} sx={{ margin: '2px 0' }} key={value.id}>
                                 <Grid item>
                                     <Avatar src={value.photoURL} alt={value.displayName} />
@@ -77,7 +77,7 @@ class EventDetailedChat extends Component {
                                     </Grid>
                                 </Grid>
                             ))}
-                        </>
+                        </Fragment>
                     })}
                     <EventDetailedChatForm addEventComment={addEventComment} eventId={eventId} form={'newComment'} parentId={0} />
                 </Box>

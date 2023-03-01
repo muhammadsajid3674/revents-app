@@ -52,7 +52,7 @@ class Kero extends Component {
         const { initialValues, updateEvent, openToastr, navigate, createEvent } = this.props;
         try {
             if (initialValues.id) {
-                updateEvent(values)
+                await updateEvent(values)
                 openToastr('Toastr', { severity: 'success', message: 'Event is Updated SuccessFully' })
                 navigate(`/event/${initialValues.id}`)
             } else {
@@ -67,7 +67,7 @@ class Kero extends Component {
     }
 
     render() {
-        const { navigate, initialValues, handleSubmit, invalid, pristine, submitting, event, cancelEvent } = this.props;
+        const { navigate, initialValues, handleSubmit, invalid, pristine, submitting, event, cancelEvent, loading } = this.props;
         return (
             <Grid container >
                 <Grid item md={8}>
@@ -85,8 +85,8 @@ class Kero extends Component {
                             <Field label='Event Venue' name='venue' component={TextInput} placeholder='Event Venue' />
                             <Field label='Event Date' name='date' component={DateTimePickerField} placeholder='Event Title' />
                             <Stack spacing={1} direction='row'>
-                                <ThemeBtnPri disabled={invalid || submitting || pristine} onClick={handleSubmit(this.onFormSubmit)} variant='contained' label='Submit' />
-                                <ThemeBtnPri onClick={() => (initialValues ? navigate(`/event/${initialValues.id}`) : navigate('/event'))} variant='contained' color='themeGrey' label='Cancel' />
+                                <ThemeBtnPri disabled={invalid || submitting || pristine} isLoading={loading} onClick={handleSubmit(this.onFormSubmit)} variant='contained' label='Submit' />
+                                <ThemeBtnPri onClick={() => (initialValues ? navigate(`/event/${initialValues.id}`) : navigate('/event'))} disabled={loading} variant='contained' color='themeGrey' label='Cancel' />
                                 <div style={{ flexGrow: 1 }} />
                                 <ThemeBtnPri onClick={() => cancelEvent(!event.cancelled, event.id)} variant='contained' label={event.cancelled ? 'Activate Event' : 'Cancel Event'} color={event.cancelled ? 'success' : 'error'} />
                             </Stack>
@@ -117,7 +117,8 @@ const mapStateToProps = (state) => {
 
     return {
         initialValues: event,
-        event
+        event,
+        loading: state.async.loading
     };
 }
 
