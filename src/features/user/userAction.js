@@ -126,31 +126,38 @@ export const setMainProfile = (photo) => {
 }
 
 export const goingToEvent = (event) => {
-    return async (dispatch, getState, { getFirestore, getFirebase }) => {
-        const firebase = getFirebase();
-        const firestore = getFirestore();
+    return async (dispatch, getState) => {
+        const firestore = firebase.firestore();
         const user = firebase.auth().currentUser;
         const profile = getState().firebase.profile
         const attendee = {
             going: true,
-            joinDate: firestore.FieldValue.serverTimestamp(),
+            joinDate: new Date(),
             photoURL: profile.photoURL || '/assets/user.png',
             displayName: profile.displayName,
             host: false
         }
         try {
-            await firestore.update(`events/${event.id}`, {
-                [`attendees.${user.uid}`]: attendee
+            dispatch(asyncActionStart())
+            let eventsDocRef = firestore.collection('events').doc(event.id);
+            let eventAttendeesDocRef = firestore.collection('event_attendees').doc(`${event.id}_${user.uid}`);
+            await firestore.runTransaction(async transaction => {
+                await transaction.get(eventsDocRef);
+                await transaction.update(eventsDocRef, {
+                    [`attendees.${user.uid}`]: attendee
+                });
+                await transaction.set(eventAttendeesDocRef, {
+                    eventDate: event.date,
+                    eventId: event.id,
+                    host: false,
+                    userUid: user.uid
+                })
             })
-            await firestore.set(`event_attendees/${event.id}_${user.uid}`, {
-                eventDate: event.date,
-                eventId: event.id,
-                host: false,
-                userUid: user.uid
-            })
+            dispatch(asyncActionFinish())
             dispatch(openToastr('Toastr', { severity: 'success', message: 'You are signup to the event.' }))
         } catch (error) {
             console.log(error);
+            dispatch(asyncActionError())
             dispatch(openToastr('Toastr', { severity: 'error', message: 'Something wen wrong' }))
         }
     }

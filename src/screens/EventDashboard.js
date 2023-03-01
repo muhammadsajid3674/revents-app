@@ -6,9 +6,8 @@ import EventList from '../features/Events/EventList/EventList'
 import { getEventsForDashboard } from '../features/Events/EventActions';
 import BackdropLoader from '../components/loading/MuiBackdrop';
 import EventActivity from '../features/Events/EventActivity/EventActivity';
-import { firestoreConnect, isLoaded } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { ThemeBtnPri } from '../components/button/ThemeBtn';
 
 class EventDashboard extends Component {
   state = {
@@ -39,7 +38,6 @@ class EventDashboard extends Component {
     const { events } = this.props;
     const lastEvent = events && events[events.length - 1];
     const next = await this.props.getEventsForDashboard(lastEvent);
-    console.log(next);
     if (next && next.docs && next.docs.length <= 1) {
       this.setState({
         moreEvents: false
