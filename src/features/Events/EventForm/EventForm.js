@@ -12,6 +12,8 @@ import { combineValidators, composeValidators, hasLengthGreaterThan, isRequired 
 import DateTimePickerField from '../../../components/ReduxForm/TimeDatePicker'
 import { openToastr } from '../../toastr/toastrActions';
 import { withFirestore } from 'react-redux-firebase';
+import { compose } from 'redux';
+import { withRouter } from '../../../config/common/util/withRouter';
 
 // Validation
 const validate = combineValidators({
@@ -36,7 +38,7 @@ const category = [
     { key: 'travel', option: 'Travel', value: 'travel' },
 ]
 
-class Kero extends Component {
+class EventForm extends Component {
 
     async componentDidMount() {
         const { firestore, params } = this.props;
@@ -98,21 +100,11 @@ class Kero extends Component {
     }
 }
 
-// Render Class in Functional Component to use Hooks
-function EventForm(props) {
-    let navigate = useNavigate();
-    let params = useParams();
-    return <Kero {...props} params={params} navigate={navigate} />
-}
-
-const mapStateToProps = (state) => {
-    var parts = window.location.pathname.split('/');
-    var lastSegment = parts.pop() || parts.pop();
-
+const mapStateToProps = (state, ownProps) => {
     let event = {};
 
     if (state.firestore.ordered.events && state.firestore.ordered.events.length > 0) {
-        event = state.firestore.ordered.events.filter(event => event.id === lastSegment)[0] || {}
+        event = state.firestore.ordered.events.filter(event => event.id === ownProps.params.id)[0] || {}
     }
 
     return {
@@ -130,4 +122,9 @@ const mapDispatchToProp = {
 }
 
 
-export default withFirestore(connect(mapStateToProps, mapDispatchToProp)(reduxForm({ form: 'eventFrom', validate, enableReinitialize: true })(EventForm)));
+export default compose(
+    withRouter,
+    withFirestore,
+    connect(mapStateToProps, mapDispatchToProp),
+    reduxForm({ form: 'eventFrom', validate, enableReinitialize: true })
+)(EventForm);

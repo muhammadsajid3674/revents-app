@@ -3,7 +3,6 @@ import { Stack } from '@mui/system'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { firebaseConnect, isEmpty, withFirestore } from 'react-redux-firebase'
-import { useNavigate, useParams } from 'react-router-dom'
 import { objectToArray } from '../../../config/common/HelperMethods/objectToArray'
 import EventDetailedChat from './EventDetailedChat'
 import { EventDetailedHeader } from './EventDetailedHeader'
@@ -12,10 +11,10 @@ import EventDetailedSidebar from './EventDetailedSidebar'
 import { goingToEvent, cancelGoingToEvent } from '../../user/userAction'
 import { addEventComment } from '../EventActions'
 import { compose } from 'redux'
-import { getIdFromPath } from '../../../config/common/HelperMethods/getIdFromPath'
 import { createDataTree } from '../../../config/common/HelperMethods/createDataTree'
+import { withRouter } from '../../../config/common/util/withRouter'
 
-class Kero extends Component {
+class EventDetailPage extends Component {
 
     async componentDidMount() {
         const { firestore, params } = this.props;
@@ -49,25 +48,18 @@ class Kero extends Component {
     }
 }
 
-// Render Class in Functional Component to use Hooks
-function EventDetailPage(props) {
-    let navigate = useNavigate();
-    let params = useParams()
-    return <Kero {...props} params={params} navigate={navigate} />
-}
-
-const mapStateToProp = (state) => {
+const mapStateToProp = (state, ownProps) => {
 
     let event = {};
 
     if (state.firestore.ordered.events && state.firestore.ordered.events.length > 0) {
-        event = state.firestore.ordered.events.filter(event => event.id === getIdFromPath())[0] || {}
+        event = state.firestore.ordered.events.filter(event => event.id === ownProps.params.id)[0] || {}
     }
 
     return {
         event,
         auth: state.firebase.auth,
-        eventChat: !isEmpty(state.firebase.data.event_chat) && objectToArray(state.firebase.data.event_chat[getIdFromPath()])
+        eventChat: !isEmpty(state.firebase.data.event_chat) && objectToArray(state.firebase.data.event_chat[ownProps.params.id])
     }
 }
 
@@ -78,7 +70,8 @@ const mapDispatchToProps = {
 }
 
 export default compose(
+    withRouter,
     withFirestore,
     connect(mapStateToProp, mapDispatchToProps),
-    firebaseConnect([`event_chat/${getIdFromPath()}`])
+    firebaseConnect((props) => ([`event_chat/${props.params.id}`]))
 )(EventDetailPage);

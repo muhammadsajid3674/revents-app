@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Grid, Stack } from '@mui/material'
-import { useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { getUserEvent } from '../userAction'
@@ -11,8 +10,9 @@ import UserEventDetail from './UserEventDetail';
 import UserProfile from './UserProfile';
 import UserPhotos from './UserPhotos';
 import UserDescription from './UserDescription';
+import { withRouter } from '../../../config/common/util/withRouter';
 
-class Kero extends Component {
+class UserDetailedPage extends Component {
 
   async componentDidMount() {
     await this.props.getUserEvent(this.props.userId);
@@ -48,25 +48,15 @@ class Kero extends Component {
   }
 }
 
-// Render Class in Functional Component to use Hooks
-function UserDetailedPage(props) {
-  let navigate = useNavigate();
-  let params = useParams();
-  return <Kero {...props} params={params} navigate={navigate} />
-}
-
-const mapStateToProps = (state) => {
-  let parts = window.location.pathname.split('/');
-  let pathId = parts.pop() || parts.pop();
-
+const mapStateToProps = (state, ownProps) => {
   let userId = null;
   let profile = {};
 
-  if (pathId === state.auth.uid) {
+  if (ownProps.params.id === state.auth.uid) {
     profile = state.firebase.profile
   } else {
     profile = !isEmpty(state.firestore.ordered.profile) && state.firestore.ordered.profile[0];
-    userId = pathId;
+    userId = ownProps.params.id;
   }
 
   return {
@@ -85,6 +75,7 @@ const mapDispatchToProps = {
 }
 
 export default compose(
+  withRouter,
   connect(mapStateToProps, mapDispatchToProps),
   firestoreConnect((auth, userId) => userProfilequery(auth, userId))
 )
