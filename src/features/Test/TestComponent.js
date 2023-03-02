@@ -4,9 +4,88 @@ import { ThemeBtnPri } from '../../components/button/ThemeBtn';
 import { incrementAsync, decrementAsync } from './TestActionCreators';
 import { openModal } from '../Modals/ModalActions';
 import { openToastr } from '../toastr/toastrActions';
+import firebase from '../../config/Firebase/FirebaseConfig'
+import { Typography } from '@mui/material';
 
 // Class Component
 class TestComponent extends Component {
+
+  handleTestUpdateProfile = async () => {
+    const firestore = firebase.firestore();
+    // doc = diana's userUid
+    let userDocRef = await firestore
+      .collection('users')
+      .doc('wgTrGhCTtVRk2CmMycQ9KEWVY9X2');
+    try {
+      await userDocRef.update({ displayName: 'testing' });
+      this.props.openToastr('Toastr', { severity: 'success', message: 'Success' })
+    } catch (error) {
+      console.log(error);
+      this.props.openToastr('Toastr', { severity: 'error', message: 'Computer says no' })
+    }
+  };
+
+  handleCreateTestEvent = async () => {
+    const firestore = firebase.firestore();
+    let eventDocRef = await firestore.collection('events').doc('DELETEME');
+    try {
+      await eventDocRef.set({
+        title: 'DELETEME'
+      });
+      this.props.openToastr('Toastr', { severity: 'success', message: 'Success' })
+    } catch (error) {
+      console.log(error);
+      this.props.openToastr('Toastr', { severity: 'error', message: 'Computer says no' })
+    }
+  };
+
+  handleTestJoinEvent = async () => {
+    const firestore = firebase.firestore();
+    let eventDocRef = await firestore.collection('events').doc('DELETEME');
+    const attendee = {
+      photoURL: '/assets/user.png',
+      displayName: 'Testing'
+    };
+    try {
+      await eventDocRef.update({
+        [`attendees.wgTrGhCTtVRk2CmMycQ9KEWVY9X2`]: attendee
+      });
+      this.props.openToastr('Toastr', { severity: 'success', message: 'Success' })
+    } catch (error) {
+      console.log(error);
+      this.props.openToastr('Toastr', { severity: 'error', message: 'Computer says no' })
+    }
+  };
+
+  handleTestCancelGoingToEvent = async () => {
+    const firestore = firebase.firestore();
+    let eventDocRef = await firestore.collection('events').doc('DELETEME');
+    try {
+      await eventDocRef.update({
+        [`attendees.wgTrGhCTtVRk2CmMycQ9KEWVY9X2`]: firebase.firestore.FieldValue.delete()
+      });
+      this.props.openToastr('Toastr', { severity: 'success', message: 'Success' })
+    } catch (error) {
+      console.log(error);
+      this.props.openToastr('Toastr', { severity: 'error', message: 'Computer says no' })
+    }
+
+  };
+
+  handleTestChangeAttendeePhotoInEvent = async () => {
+    const firestore = firebase.firestore();
+    let eventDocRef = await firestore.collection('events').doc('DELETEME');
+    try {
+      await eventDocRef.update({
+        [`attendees.wgTrGhCTtVRk2CmMycQ9KEWVY9X2.photoURL`]: 'testing123.jpg'
+      });
+      this.props.openToastr('Toastr', { severity: 'success', message: 'Success' })
+    } catch (error) {
+      console.log(error);
+      this.props.openToastr('Toastr', { severity: 'error', message: 'Computer says no' })
+    }
+  };
+
   render() {
     return (
       <div>
@@ -26,6 +105,38 @@ class TestComponent extends Component {
           this.props.openToastr('Toastr', { severity: 'error', message: 'Event is not created Created successfully' })
         }} />
         {/* <PlacesInput /> */}
+        <br />
+        <br />
+        <br />
+        <Typography variant='h2'>Permissions tests</Typography>
+        <ThemeBtnPri
+          onClick={this.handleCreateTestEvent}
+          color='themeDefault'
+          label='Test create event - should fail if anon'
+        />
+        <br/>
+        <ThemeBtnPri
+          onClick={this.handleTestUpdateProfile}
+          color='google'
+          label='Test update dianas profile - should fail if anon/not diana - should succeed if diana'
+        />
+        <ThemeBtnPri
+          onClick={this.handleTestJoinEvent}
+          color='facebook'
+          label='Test joining an event - should fail if anon/not diana - should succeed if diana'
+        />
+        <ThemeBtnPri
+          onClick={this.handleTestCancelGoingToEvent}
+          color='success'
+          label='Test cancelling attendance to an event - should fail if anon/not diana - should succeed if diana'
+        />
+        <ThemeBtnPri
+          onClick={this.handleTestChangeAttendeePhotoInEvent}
+          color='themeOrange'
+          label='Test changing photo for event attendee - should fail if anon/not diana - should succeed if diana'
+        />
+        <br />
+        <br />
       </div>
     )
   }
