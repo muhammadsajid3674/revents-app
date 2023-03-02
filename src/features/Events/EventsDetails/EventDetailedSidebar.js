@@ -29,7 +29,7 @@ const EventDetailedSidebar = ({ attendees }) => {
             </Grid>
             <Grid item alignSelf='start'>
               <ThemeProvider theme={theme}>
-                {/* {attendees.isHost ?? <Chip label="Host" color="themeHost" />} */}
+                {attendees.host && <Chip label="Host" color="themeHost" />}
               </ThemeProvider>
             </Grid>
           </Grid>

@@ -14,6 +14,8 @@ import { compose } from 'redux'
 import { createDataTree } from '../../../config/common/HelperMethods/createDataTree'
 import { withRouter } from '../../../config/common/util/withRouter'
 import { openModal } from '../../Modals/ModalActions'
+import NotFound from '../../../screens/NotFoundPage'
+import BackdropLoader from '../../../components/loading/MuiBackdrop'
 
 class EventDetailPage extends Component {
 
@@ -27,12 +29,15 @@ class EventDetailPage extends Component {
     }
 
     render() {
-        const { event, auth, goingToEvent, cancelGoingToEvent, addEventComment, eventChat, loading, openModal } = this.props;
+        const { event, auth, goingToEvent, cancelGoingToEvent, addEventComment, eventChat, loading, openModal, requesting, params } = this.props;
         let attendees = event && event.attendees && objectToArray(event.attendees)
         const isHost = event.hostUid === auth.uid;
         const isGoing = attendees && attendees.some(a => a.id === auth.uid);
         const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
         const authenticated = auth.isLoaded && !auth.isEmpty
+        const loadingDetails = requesting[`events/${params.id}`];
+        if (loadingDetails) return <BackdropLoader />
+        if (Object.keys(event).length === 0) return <NotFound />
         return (
             <Grid container spacing={2}>
                 <Grid item md={8}>
@@ -78,7 +83,8 @@ const mapStateToProp = (state, ownProps) => {
         event,
         auth: state.firebase.auth,
         eventChat: !isEmpty(state.firebase.data.event_chat) && objectToArray(state.firebase.data.event_chat[ownProps.params.id]),
-        loading: state.async.loading
+        loading: state.async.loading,
+        requesting: state.firestore.status.requesting
     }
 }
 

@@ -1,14 +1,18 @@
 import { closeModal } from "../Modals/ModalActions"
 import { reset, SubmissionError } from 'redux-form';
+import { asyncActionError, asyncActionFinish, asyncActionStart } from "../async/asyncActions";
 
 export const login = (credentials) => {
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase()
         try {
+            dispatch(asyncActionStart())
             await firebase.auth().signInWithEmailAndPassword(credentials.email, credentials.password)
             dispatch(closeModal())
+            dispatch(asyncActionFinish())
         } catch (error) {
             console.log(error);
+            dispatch(asyncActionError())
             throw new SubmissionError({
                 _error: error.message.replace('Firebase: ', '').replace(/\(auth.*\)\.?/, '')
             })
@@ -21,6 +25,7 @@ export const registerUser = user => {
         const firebase = getFirebase();
         const firestore = getFirestore();
         try {
+            dispatch(asyncActionStart())
             let createUser = await firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
             console.log(createUser);
             await createUser.user.updateProfile({
@@ -31,9 +36,11 @@ export const registerUser = user => {
                 createdAt: firestore.FieldValue.serverTimestamp()
             };
             await firestore.set(`users/${createUser.user.uid}`, { ...newUser })
+            dispatch(asyncActionFinish())
             dispatch(closeModal())
         } catch (error) {
             console.log(error);
+            dispatch(asyncActionError())
             throw new SubmissionError({
                 _error: error.message.replace('Firebase: ', '').replace(/\(auth.*\)\.?/, '')
             })

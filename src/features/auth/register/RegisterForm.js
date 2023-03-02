@@ -27,7 +27,7 @@ const RegisterForm = ({ handleSubmit, registerUser, error, invalid, submitting, 
                     <Field type='email' name='email' component={TextInput} placeholder='Email Address' />
                     <Field type='password' name='password' component={TextInput} placeholder='Password' />
                     {error && <Alert severity="error">{error}</Alert>}
-                    <ThemeBtnPri disabled={invalid || submitting} label='Register' onClick={handleSubmit(registerUser)} />
+                    <ThemeBtnPri disabled={invalid || submitting} isLoading={loading} label='Register' onClick={handleSubmit(registerUser)} />
                     <Divider sx={{ marginTop: 1 }}>OR</Divider>
                     <SocialLogin socialLogin={socialLogin} />
                 </Stack>

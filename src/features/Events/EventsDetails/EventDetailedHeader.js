@@ -36,8 +36,9 @@ export const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent, canc
                     {!isHost &&
                         <Fragment>
                             {isGoing && <ThemeBtnPri onClick={() => cancelGoingToEvent(event)} label='Cancel My Plane' color="themeGrey" />}
-                            {!isGoing && authenticated && <ThemeBtnPri isLoading={loading} onClick={() => goingToEvent(event)} label='JOIN THIS EVENT' />}
-                            {!authenticated && <ThemeBtnPri isLoading={loading} onClick={() => openModal('UnAuthModal')} label='JOIN THIS EVENT' />}
+                            {!isGoing && authenticated && !event.cancelled && <ThemeBtnPri isLoading={loading} onClick={() => goingToEvent(event)} label='JOIN THIS EVENT' />}
+                            {!authenticated && !event.cancelled && <ThemeBtnPri isLoading={loading} onClick={() => openModal('UnAuthModal')} label='JOIN THIS EVENT' />}
+                            {event.cancelled && <Typography variant='body2' sx={{ p: 1, backgroundColor: '#c62828', color: '#fff', borderRadius: 1, width: 220 }}>This Event Has Been Cancelled</Typography>}
                         </Fragment>
                     }
                 </Box>

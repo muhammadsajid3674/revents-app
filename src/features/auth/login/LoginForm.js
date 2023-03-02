@@ -14,7 +14,7 @@ const validate = combineValidators({
     password: isRequired('password')
 });
 
-const LoginForm = ({ login, handleSubmit, error, invalid, submitting, socialLogin }) => {
+const LoginForm = ({ login, handleSubmit, error, invalid, submitting, socialLogin, loading }) => {
     return (
         <Box>
             <Box sx={{ padding: '10px 20px' }}>
@@ -26,7 +26,7 @@ const LoginForm = ({ login, handleSubmit, error, invalid, submitting, socialLogi
                     <Field type='email' name='email' component={TextInput} placeholder='Email Address' />
                     <Field type='password' name='password' component={TextInput} placeholder='Password' />
                     {error && <Alert severity="error">{error}</Alert>}
-                    <ThemeBtnPri disabled={invalid || submitting} label='Login' variant='contained' onClick={handleSubmit(login)} />
+                    <ThemeBtnPri disabled={invalid || submitting} isLoading={loading} label='Login' variant='contained' onClick={handleSubmit(login)} />
                     <Divider sx={{ marginTop: 1 }}>OR</Divider>
                     <SocialLogin socialLogin={socialLogin} />
                 </Stack>
@@ -35,9 +35,13 @@ const LoginForm = ({ login, handleSubmit, error, invalid, submitting, socialLogi
     )
 }
 
+const mapStateToProps = (state) => ({
+    loading: state.async.loading
+})
+
 const mapDispatchToProps = {
     login,
     socialLogin
 }
 
-export default connect(null, mapDispatchToProps)(reduxForm({ form: 'loginForm', validate })(LoginForm))
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({ form: 'loginForm', validate })(LoginForm))

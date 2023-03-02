@@ -1,6 +1,7 @@
-import { Grid, Link, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function NotFound() {
     return (
@@ -20,7 +21,7 @@ function NotFound() {
                         <Typography variant="h4">The page you’re looking for was not found.</Typography>
                     </Grid>
                     <Grid item md={12} sx={{ textAlign: 'center' }}>
-                        <Link variant="subtitle2" sx={{ fontWeight: 'bold' }}>Back To Home</Link>
+                        <Link to='/event' style={{ fontWeight: 'bold' }}>Back To Home</Link>
                     </Grid>
                     <Grid item md={12}>
                         <Typography variant="subtitle2" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Copyright © 2018 All rights reserved.</Typography>
