@@ -11,18 +11,20 @@ import NotFound from '../screens/NotFoundPage';
 import TestComponent from '../features/Test/TestComponent';
 import EventForm from '../features/Events/EventForm/EventForm';
 import EventDetailPage from '../features/Events/EventsDetails/EventDetailPage';
+import Protected from './common/util/ProtectedRoute';
+import { connect } from 'react-redux';
 
-function AppRouter() {
+function AppRouter({ auth }) {
     return (
         <Router>
             <Routes>
                 <Route path='/' element={<HomePage />} />
-                <Route path='/*' element={<SubRouter />} />
+                <Route path='/*' element={<SubRouter auth={auth} />} />
             </Routes>
         </Router>
     )
 }
-function SubRouter() {
+function SubRouter({ auth }) {
     const location = useLocation()
     return (
         <Fragment>
@@ -32,11 +34,21 @@ function SubRouter() {
                 <Routes key={location.key}>
                     <Route path='event' element={<EventDashboard />} />
                     <Route path='event/:id' element={<EventDetailPage />} />
-                    <Route path='people' element={<PeopleDashboard />} />
-                    <Route path='profile/:id' element={<UserDetailedPage />} />
-                    <Route path='settings/*' element={<SettingDashboard />} />
-                    {['createEvent', 'manage/:id'].map((path, index) => <Route key={index} path={path} element={<EventForm />} />)}
                     <Route path='test' element={<TestComponent />} />
+                    <Route path='people' element={<PeopleDashboard />} />
+
+                    <Route path='profile/:id' element={<Protected isSignedIn={auth}>
+                        <UserDetailedPage />
+                    </Protected>} />
+
+                    <Route path='settings/*' element={<Protected isSignedIn={auth}>
+                        <SettingDashboard />
+                    </Protected>} />
+
+                    {['createEvent', 'manage/:id'].map((path, index) => <Route key={index} path={path} element={<Protected isSignedIn={auth}>
+                        <EventForm />
+                    </Protected>} />)}
+
                     <Route path='*' element={<NotFound />} />
                 </Routes>
             </Container>
@@ -44,5 +56,9 @@ function SubRouter() {
     )
 }
 
+const mapStateToProps = (state) => ({
+    auth: state.firebase.auth.isEmpty
+})
 
-export default AppRouter
+
+export default connect(mapStateToProps)(AppRouter)

@@ -13,6 +13,7 @@ import { addEventComment } from '../EventActions'
 import { compose } from 'redux'
 import { createDataTree } from '../../../config/common/HelperMethods/createDataTree'
 import { withRouter } from '../../../config/common/util/withRouter'
+import { openModal } from '../../Modals/ModalActions'
 
 class EventDetailPage extends Component {
 
@@ -26,18 +27,35 @@ class EventDetailPage extends Component {
     }
 
     render() {
-        const { event, auth, goingToEvent, cancelGoingToEvent, addEventComment, eventChat, loading } = this.props;
+        const { event, auth, goingToEvent, cancelGoingToEvent, addEventComment, eventChat, loading, openModal } = this.props;
         let attendees = event && event.attendees && objectToArray(event.attendees)
         const isHost = event.hostUid === auth.uid;
         const isGoing = attendees && attendees.some(a => a.id === auth.uid);
         const chatTree = !isEmpty(eventChat) && createDataTree(eventChat);
+        const authenticated = auth.isLoaded && !auth.isEmpty
         return (
             <Grid container spacing={2}>
                 <Grid item md={8}>
                     <Stack spacing={2}>
-                        <EventDetailedHeader event={event} isHost={isHost} isGoing={isGoing} goingToEvent={goingToEvent} loading={loading} cancelGoingToEvent={cancelGoingToEvent} />
-                        <EventDetailedInfo event={event} />
-                        <EventDetailedChat addEventComment={addEventComment} eventId={event.id} eventChat={chatTree} />
+                        <EventDetailedHeader
+                            event={event}
+                            isHost={isHost}
+                            isGoing={isGoing}
+                            goingToEvent={goingToEvent}
+                            loading={loading}
+                            cancelGoingToEvent={cancelGoingToEvent}
+                            authenticated={authenticated}
+                            openModal={openModal}
+                        />
+                        <EventDetailedInfo
+                            event={event}
+                        />
+                        {authenticated && <EventDetailedChat
+                            addEventComment={addEventComment}
+                            eventId={event.id}
+                            eventChat={chatTree}
+                        />
+                        }
                     </Stack>
                 </Grid>
                 <Grid item md={4}>
@@ -67,7 +85,8 @@ const mapStateToProp = (state, ownProps) => {
 const mapDispatchToProps = {
     goingToEvent,
     cancelGoingToEvent,
-    addEventComment
+    addEventComment,
+    openModal
 }
 
 export default compose(

@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 
 
-export const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingToEvent, loading }) => {
+export const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent, cancelGoingToEvent, loading, authenticated, openModal }) => {
 
     const navigate = useNavigate()
 
@@ -35,7 +35,9 @@ export const EventDetailedHeader = ({ event, isHost, isGoing, goingToEvent, canc
                 <Box sx={{ flexGrow: 1 }}>
                     {!isHost &&
                         <Fragment>
-                            {isGoing ? <ThemeBtnPri onClick={() => cancelGoingToEvent(event)} label='Cancel My Plane' color="themeGrey" /> : <ThemeBtnPri isLoading={loading} onClick={() => goingToEvent(event)} label='JOIN THIS EVENT' />}
+                            {isGoing && <ThemeBtnPri onClick={() => cancelGoingToEvent(event)} label='Cancel My Plane' color="themeGrey" />}
+                            {!isGoing && authenticated && <ThemeBtnPri isLoading={loading} onClick={() => goingToEvent(event)} label='JOIN THIS EVENT' />}
+                            {!authenticated && <ThemeBtnPri isLoading={loading} onClick={() => openModal('UnAuthModal')} label='JOIN THIS EVENT' />}
                         </Fragment>
                     }
                 </Box>
