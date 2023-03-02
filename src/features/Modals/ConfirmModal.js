@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { connect } from 'react-redux';
 import { closeModal } from './ModalActions';
-import LoginForm from '../auth/login/LoginForm';
 import { Stack, Typography } from '@mui/material';
 import { ThemeBtnPri } from '../../components/button/ThemeBtn';
 
