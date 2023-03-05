@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Grid, Stack } from '@mui/material'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { getUserEvent } from '../userAction'
+import { getUserEvent, followingPeople } from '../userAction'
 import { firestoreConnect, isEmpty } from 'react-redux-firebase';
 import { userProfilequery } from '../userProfilequery';
 import BackdropLoader from '../../../components/loading/MuiBackdrop';
@@ -23,7 +23,7 @@ class UserDetailedPage extends Component {
   }
 
   render() {
-    const { navigate, params, auth, profile, photos, requesting, events, eventLoading } = this.props;
+    const { navigate, params, auth, profile, photos, requesting, events, eventLoading, followingPeople } = this.props;
     const isCurrentUser = auth.uid === params.id;
 
     const loading = Object.values(requesting).some(a => a === true);
@@ -33,7 +33,7 @@ class UserDetailedPage extends Component {
       <Grid container spacing={3}>
         <Grid item md={6}>
           <Stack spacing={3}>
-            <UserProfile navigate={navigate} profile={profile} auth={auth} isCurrentUser={isCurrentUser} />
+            <UserProfile navigate={navigate} profile={profile} auth={auth} isCurrentUser={isCurrentUser} followingPeople={followingPeople} />
             <UserDescription profile={profile} />
           </Stack>
         </Grid>
@@ -51,11 +51,13 @@ class UserDetailedPage extends Component {
 const mapStateToProps = (state, ownProps) => {
   let userId = null;
   let profile = {};
+  // let followed;
 
   if (ownProps.params.id === state.auth.uid) {
     profile = state.firebase.profile
   } else {
     profile = !isEmpty(state.firestore.ordered.profile) && state.firestore.ordered.profile[0];
+    // followed = 
     userId = ownProps.params.id;
   }
 
@@ -71,7 +73,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  getUserEvent
+  getUserEvent,
+  followingPeople
 }
 
 export default compose(

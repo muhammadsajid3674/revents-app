@@ -3,11 +3,10 @@ import React from 'react'
 import { ThemeBtnSec } from '../../../components/button/ThemeBtn'
 import brokenImage from '../../../assets/user.png';
 import moment from 'moment/moment';
-
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LazyLoad from 'react-lazyload';
 
-const UserProfile = ({ navigate, profile, auth, isCurrentUser }) => {
+const UserProfile = ({ navigate, profile, auth, isCurrentUser, followingPeople }) => {
 
   let age;
   if (profile.dateOfBirth) {
@@ -57,7 +56,7 @@ const UserProfile = ({ navigate, profile, auth, isCurrentUser }) => {
               }
             }} />
           ) : (
-            <ThemeBtnSec label='Follow User' style={{
+            <ThemeBtnSec label='Follow User' onClick={() => followingPeople(profile)} style={{
               border: '1px solid #182848',
               color: '#182848',
               '&:hover': {

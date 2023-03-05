@@ -221,3 +221,44 @@ export const getUserEvent = (userId, activeTab) => {
 
     }
 }
+
+export const followingPeople = (userToFollow) => {
+    return async (dispatch, getState, { getFirestore }) => {
+        const firestore = getFirestore();
+        const currentUser = firestore.auth().currentUser;
+        const userProfile = getState().firebase.profile
+        const { displayName, city, photoURL, id } = userToFollow;
+        const followingObj = {
+            displayName: displayName,
+            city: city || 'Unknown City',
+            photoURL: photoURL || '/assets/user.png'
+        }
+        const followerObj = {
+            displayName: userProfile.displayName,
+            city: userProfile.city || 'Unknown City',
+            photoURL: userProfile.photoURL || '/assets/user.png'
+        }
+        try {
+            await firestore.set({
+                collection: 'users',
+                doc: currentUser.uid,
+                subcollections: [{
+                    collection: 'following',
+                    doc: id
+                }]
+            }, followingObj)
+            await firestore.set({
+                collection: 'users',
+                doc: id,
+                subcollections: [{
+                    collection: 'followers',
+                    doc: currentUser.uid
+                }]
+            }, followerObj)
+            console.log('success');
+        } catch (error) {
+            console.log(error);
+            dispatch(openToastr('Toastr', { severity: 'error', message: 'Something wen wrong' }))
+        }
+    }
+}
