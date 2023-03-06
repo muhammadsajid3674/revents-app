@@ -255,7 +255,34 @@ export const followingPeople = (userToFollow) => {
                     doc: currentUser.uid
                 }]
             }, followerObj)
-            console.log('success');
+        } catch (error) {
+            console.log(error);
+            dispatch(openToastr('Toastr', { severity: 'error', message: 'Something wen wrong' }))
+        }
+    }
+}
+
+export const unFollowPeople = ({ id }) => {
+    return async (dispatch, getState, { getFirestore }) => {
+        const firestore = getFirestore();
+        const currentUser = firestore.auth().currentUser;
+        try {
+            await firestore.delete({
+                collection: 'users',
+                doc: currentUser.uid,
+                subcollections: [{
+                    collection: 'following',
+                    doc: id
+                }]
+            })
+            await firestore.delete({
+                collection: 'users',
+                doc: id,
+                subcollections: [{
+                    collection: 'followers',
+                    doc: currentUser.uid
+                }]
+            })
         } catch (error) {
             console.log(error);
             dispatch(openToastr('Toastr', { severity: 'error', message: 'Something wen wrong' }))

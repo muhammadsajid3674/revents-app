@@ -1,4 +1,4 @@
-export const userProfilequery = ({ auth, userId }) => {
+export const userProfilequery = ({ auth, userId, params }) => {
     if (userId !== null) {
         return [
             {
@@ -13,6 +13,14 @@ export const userProfilequery = ({ auth, userId }) => {
                     { collection: 'photos' }
                 ],
                 storeAs: 'photos'
+            },
+            {
+                collection: 'users',
+                doc: auth.uid,
+                subcollections: [
+                    { collection: 'following', doc: userId }
+                ],
+                storeAs: 'following'
             }
         ]
     } else {
@@ -24,6 +32,22 @@ export const userProfilequery = ({ auth, userId }) => {
                     { collection: 'photos' }
                 ],
                 storeAs: 'photos'
+            },
+            {
+                collection: 'users',
+                doc: auth.uid,
+                subcollections: [
+                    { collection: 'following' }
+                ],
+                storeAs: 'following'
+            },
+            {
+                collection: 'users',
+                doc: auth.uid,
+                subcollections: [
+                    { collection: 'followers' }
+                ],
+                storeAs: 'followers'
             }
         ]
     }

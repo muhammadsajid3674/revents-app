@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Grid, Stack } from '@mui/material'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { getUserEvent, followingPeople } from '../userAction'
+import { getUserEvent, followingPeople, unFollowPeople } from '../userAction'
 import { firestoreConnect, isEmpty } from 'react-redux-firebase';
 import { userProfilequery } from '../userProfilequery';
 import BackdropLoader from '../../../components/loading/MuiBackdrop';
@@ -11,34 +11,44 @@ import UserProfile from './UserProfile';
 import UserPhotos from './UserPhotos';
 import UserDescription from './UserDescription';
 import { withRouter } from '../../../config/common/util/withRouter';
+import UserFriends from './UserFriends';
 
 class UserDetailedPage extends Component {
 
   async componentDidMount() {
-    await this.props.getUserEvent(this.props.userId);
+    await this.props.getUserEvent(this.props.params.id);
   }
 
   tabChange = (e, data) => {
-    this.props.getUserEvent(this.props.userId, data)
+    this.props.getUserEvent(this.props.params.id, data)
   }
 
   render() {
-    const { navigate, params, auth, profile, photos, requesting, events, eventLoading, followingPeople } = this.props;
+    const { navigate, params, auth, profile, photos, requesting, events, eventLoading, followingPeople, following, followers, unFollowPeople } = this.props;
     const isCurrentUser = auth.uid === params.id;
-
     const loading = Object.values(requesting).some(a => a === true);
+    const isFollowing = !isEmpty(following);
 
     if (loading) return <BackdropLoader />
     return (
       <Grid container spacing={3}>
         <Grid item md={6}>
           <Stack spacing={3}>
-            <UserProfile navigate={navigate} profile={profile} auth={auth} isCurrentUser={isCurrentUser} followingPeople={followingPeople} />
+            <UserProfile
+              navigate={navigate}
+              profile={profile}
+              auth={auth}
+              isCurrentUser={isCurrentUser}
+              followingPeople={followingPeople}
+              isFollowing={isFollowing}
+              unFollowPeople={unFollowPeople}
+            />
             <UserDescription profile={profile} />
           </Stack>
         </Grid>
         <Grid item md={6}>
           <Stack spacing={3}>
+            <UserFriends followers={followers} following={following} loading={loading} />
             <UserPhotos photos={photos} />
             <UserEventDetail events={events} eventLoading={eventLoading} tabChange={this.tabChange} />
           </Stack>
@@ -51,13 +61,11 @@ class UserDetailedPage extends Component {
 const mapStateToProps = (state, ownProps) => {
   let userId = null;
   let profile = {};
-  // let followed;
 
-  if (ownProps.params.id === state.auth.uid) {
+  if (ownProps.params.id === state.firebase.auth.uid) {
     profile = state.firebase.profile
   } else {
     profile = !isEmpty(state.firestore.ordered.profile) && state.firestore.ordered.profile[0];
-    // followed = 
     userId = ownProps.params.id;
   }
 
@@ -68,18 +76,21 @@ const mapStateToProps = (state, ownProps) => {
     photos: state.firestore.ordered.photos,
     requesting: state.firestore.status.requesting,
     events: state.events,
-    eventLoading: state.async.loading
+    eventLoading: state.async.loading,
+    following: state.firestore.ordered.following,
+    followers: state.firestore.ordered.followers,
   }
 };
 
 const mapDispatchToProps = {
   getUserEvent,
-  followingPeople
+  followingPeople,
+  unFollowPeople
 }
 
 export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect((auth, userId) => userProfilequery(auth, userId))
+  firestoreConnect((props) => userProfilequery(props))
 )
   (UserDetailedPage);

@@ -6,7 +6,7 @@ import moment from 'moment/moment';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LazyLoad from 'react-lazyload';
 
-const UserProfile = ({ navigate, profile, auth, isCurrentUser, followingPeople }) => {
+const UserProfile = ({ navigate, profile, auth, isCurrentUser, followingPeople, isFollowing, unFollowPeople }) => {
 
   let age;
   if (profile.dateOfBirth) {
@@ -56,15 +56,27 @@ const UserProfile = ({ navigate, profile, auth, isCurrentUser, followingPeople }
               }
             }} />
           ) : (
-            <ThemeBtnSec label='Follow User' onClick={() => followingPeople(profile)} style={{
-              border: '1px solid #182848',
-              color: '#182848',
-              '&:hover': {
-                transition: "500ms all",
-                backgroundColor: "#182848 !important",
-                color: '#fff',
-              }
-            }} />
+            isFollowing ? (
+              <ThemeBtnSec label='Unfollow User' onClick={() => unFollowPeople(profile)} style={{
+                border: '1px solid #182848',
+                color: '#182848',
+                '&:hover': {
+                  transition: "500ms all",
+                  backgroundColor: "#182848 !important",
+                  color: '#fff',
+                }
+              }} />
+            ) : (
+              <ThemeBtnSec label='Follow User' onClick={() => followingPeople(profile)} style={{
+                border: '1px solid #182848',
+                color: '#182848',
+                '&:hover': {
+                  transition: "500ms all",
+                  backgroundColor: "#182848 !important",
+                  color: '#fff',
+                }
+              }} />
+            )
           )}
         </Grid>
       </Grid>
