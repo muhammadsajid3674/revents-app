@@ -5,7 +5,6 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Card, CardActionArea, CardContent, CardMedia, CircularProgress, Grid, Paper, Stack } from '@mui/material';
-import eventImage from '../../../assets/categoryImages/travel.jpg';
 import EventIcon from '@mui/icons-material/Event';
 import moment from 'moment';
 import { Link } from 'react-router-dom';

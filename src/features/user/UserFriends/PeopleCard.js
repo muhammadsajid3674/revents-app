@@ -1,5 +1,4 @@
 import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material'
-import userImage from '../../../assets/user.png'
 import React from 'react'
 import { Link } from 'react-router-dom'
 

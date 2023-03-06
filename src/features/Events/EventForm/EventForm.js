@@ -1,9 +1,8 @@
-import { Box, Button, createTheme, Grid, Paper, Stack, ThemeProvider, Typography } from '@mui/material'
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ThemeBtnPri } from '../../../components/button/ThemeBtn'
 import { createEvent, updateEvent, cancelEvent } from '../EventActions';
-import { useNavigate, useParams } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 import TextInput from '../../../components/ReduxForm/TextInput'
 import TextArea from '../../../components/ReduxForm/TextArea'
