@@ -1,5 +1,5 @@
 
-import { CircularProgress, Grid } from '@mui/material'
+import { Box, CircularProgress, Grid, Paper, Typography } from '@mui/material'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import EventList from '../features/Events/EventList/EventList'
@@ -21,6 +21,11 @@ class EventDashboard extends Component {
     if (next && next.docs && next.docs.length > 1) {
       this.setState({
         moreEvents: true,
+        initialLoading: false
+      })
+    } else {
+      this.setState({
+        moreEvents: false,
         initialLoading: false
       })
     }
@@ -50,7 +55,13 @@ class EventDashboard extends Component {
     return (
       <Grid container spacing={2}>
         <Grid item md={7}>
-          <EventList events={this.state.loadEvents} isLoading={this.props.loading} nextEvent={this.getNextEvent} moreEvents={this.state.moreEvents} />
+          {this.props.events.length === 0 ? <Paper>
+            <Box sx={{ padding: '10px 15px' }}>
+              <Typography variant='h4'>No Upcoming Events</Typography>
+            </Box>
+          </Paper> :
+            <EventList events={this.state.loadEvents} isLoading={this.props.loading} nextEvent={this.getNextEvent} moreEvents={this.state.moreEvents} />
+          }
         </Grid>
         <Grid item md={5}>
           <EventActivity />
